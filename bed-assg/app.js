@@ -8,6 +8,8 @@ const port = process.env.PORT || 3000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const config = require('./dbConfig');
+const mssql = require('mssql');
 const User = require('./user'); // Assuming this module handles User operations
 const Professional = require('./professional'); // Assuming this module handles Professional operations
 
@@ -68,10 +70,51 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Handle reset password request
+app.post('/api/reset-password', async (req, res) => {
+    const { email, birthday, newPassword } = req.body;
+
+    try {
+        // Check if email and birthday match in either Users or Professionals table
+        const pool = await new mssql.ConnectionPool(config).connect();
+        const request = pool.request();
+        request.input('email', mssql.NVarChar, email);
+        request.input('birthday', mssql.Date, birthday);
+
+        // Query both tables to check for a match
+        const userQuery = `SELECT * FROM Users WHERE Email = @email AND Birthday = @birthday`;
+        const professionalQuery = `SELECT * FROM Professionals WHERE Email = @email AND Birthday = @birthday`;
+
+        const userResult = await request.query(userQuery);
+        const professionalResult = await request.query(professionalQuery);
+
+        if (userResult.recordset.length === 0 && professionalResult.recordset.length === 0) {
+            return res.status(400).json({ message: 'Invalid email or birthday' });
+        }
+
+        // Update password
+        const updateRequest = pool.request();
+        updateRequest.input('email', mssql.NVarChar, email);
+        updateRequest.input('newPassword', mssql.NVarChar, newPassword);
+
+        // Update password in Users table
+        await updateRequest.query('UPDATE Users SET Password = @newPassword WHERE Email = @email');
+
+        // Update password in Professionals table
+        await updateRequest.query('UPDATE Professionals SET Password = @newPassword WHERE Email = @email');
+
+        res.status(200).json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).json({ error: 'Error resetting password' });
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
 // RAYANN END ---------------------------------------------------------------------------------------------------
 
 // QI AN START ---------------------------------------------------------------------------------------------------
