@@ -1,15 +1,18 @@
 // UNIVERSAL PORT
 
+
+const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-
-
-// RAYANN START ---------------------------------------------------------------------------------------------------
-const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
 const config = require('./dbConfig');
 const mssql = require('mssql');
+const sql = require("mssql");
+const dbConfig = require("../dbConfig");
+const cors = require("cors");
+const path = require("path");
+// RAYANN START ---------------------------------------------------------------------------------------------------
+
 const User = require('./user'); // Assuming this module handles User operations
 const Professional = require('./professional'); // Assuming this module handles Professional operations
 
@@ -118,12 +121,6 @@ app.listen(port, () => {
 // RAYANN END ---------------------------------------------------------------------------------------------------
 
 // QI AN START ---------------------------------------------------------------------------------------------------
-const express = require("express");
-const sql = require("mssql");
-const dbConfig = require("../dbConfig");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const path = require("path");
 
 
 app.use(bodyParser.json());
