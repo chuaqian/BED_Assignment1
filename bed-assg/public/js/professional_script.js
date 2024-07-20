@@ -1,42 +1,39 @@
-// professional_script.js (example)
-document.addEventListener('DOMContentLoaded', function () {
-    const signupForm = document.getElementById('signupProfessionalForm');
+document.getElementById('signupProfessionalForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    signupForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const birthday = document.getElementById('birthday').value;
+    const occupation = document.getElementById('occupation').value;
+    const highestEducation = document.getElementById('highestEducation').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-        const formData = new FormData(signupForm);
-        const data = Object.fromEntries(formData.entries());
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
 
-        if (data.password !== data.confirmPassword) {
-            alert('Passwords do not match!');
-            return;
+    const professional = { name, email, phoneNumber, birthday, occupation, highestEducation, password };
+
+    try {
+        const response = await fetch('http://localhost:3000/api/professionals', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(professional)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('Professional signed up successfully!');
+            window.location.href = 'login.html';
+        } else {
+            alert(`Error: ${result.error}`);
         }
-
-        // Remove confirmPassword from the data before sending to the server
-        delete data.confirmPassword;
-
-        try {
-            const response = await fetch('/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Professional created:', result);
-                alert('Professional signed up successfully!');
-            } else {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-                alert('Error signing up professional.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error signing up professional.');
-        }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+    }
 });

@@ -1,4 +1,5 @@
 /* Global styles */
+/* Global styles */
 * {
     margin: 0;
     padding: 0;
@@ -171,6 +172,17 @@ p a:hover {
     color: #FFD6DC;
 }
 
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .fa-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
 /* Media queries */
 @media (max-width: 991px) {
     html {
@@ -215,5 +227,336 @@ p a:hover {
 
     header {
         padding: 2rem;
+    }
+}
+
+
+/* Main content styles */
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 90%;
+    max-width: 1200px;
+    margin-top: 50rem; /* Add this line to match the height of the navbar */
+}
+
+/* Contact section styles */
+.contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.contact-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+}
+
+.contact-form h2 {
+    margin-bottom: 20px;
+    font-size: 25px;
+    color: #29537D; /* dark blue */
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form input[type="tel"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.contact-form label {
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contact-form label input {
+    margin-right: 10px;
+}
+
+.contact-form button {
+    background-color: #29537D;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.contact-form button:hover {
+    background-color: #FFD6DC;
+    color: #29537D;
+}
+
+.contact-form p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Offerings text styles */
+.offerings-text {
+    width: 45%;
+    padding: 20px;
+    color: #29537D; /* dark blue */
+    font-size: 1.6rem;
+    line-height: 1.5;
+    background-color: transparent; /* Ensure it's not in the white container */
+}
+
+.offerings-text h2 {
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+
+/* Team section styles */
+.team-section {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.team-section h2 {
+    margin-bottom: 30px;
+    font-size: 2.5rem; /* Increase font size to match the rest */
+    color: #29537D; /* Match color scheme */
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Increase gap for larger images */
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.team-member img {
+    border-radius: 50%;
+    width: 200px; /* Increase size */
+    height: 200px; /* Increase size */
+    object-fit: cover;
+}
+
+.team-member h3 {
+    margin: 10px 0 0;
+    font-size: 2rem; /* Increase font size */
+    color: #29537D; /* Match color scheme */
+}
+
+.team-member p {
+    margin: 5px 0 0;
+    font-size: 1.6rem; /* Increase font size */
+    color: #666; /* Match color scheme */
+}
+
+/* Media queries */
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .navbar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .fa-bars {
+        display: block;
+    }
+
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
+    }
+
+    .contact-section,
+    .offerings-text {
+        width: 90%;
+        margin-bottom: 2rem;
+    }
+
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    header .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .main-content {
+        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
+    }
+}
+
+
+
+/* PROFILE PAGE -------------------------------------- */
+.profile-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 400px;
+    max-width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-top: 8rem;
+}
+
+.profile-picture {
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-details h1,
+.profile-details p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.profile-actions {
+    margin-top: 20px;
+}
+
+.profile-actions button {
+    margin: 5px;
+    padding: 8px 16px;
+    background-color: #29537D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+}
+
+.profile-actions button:hover {
+    background-color: #FFD6DC;
+    color: #29537D;
+}
+
+#verifyProfessionalButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #29537D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#verifyProfessionalButton:hover {
+    background-color: #FFD6DC;
+    color: #29537D;
+}
+
+.professional-only {
+    display: none;
+}
+
+.gender-group {
+    margin-bottom: 20px;
+}
+
+.gender-option {
+    margin-right: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.gender-option label {
+    font-size: 16px;
+    color: #000; /* Black text */
+    cursor: pointer;
+}
+
+.gender-option input[type="radio"] + label:before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 18px;
+}
+
+.gender-option input[type="radio"]:checked + label:before {
+    background-color: #555;
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .profile-picture img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-details h1 {
+        font-size: 20px;
+    }
+
+    .profile-details p {
+        font-size: 14px;
     }
 }

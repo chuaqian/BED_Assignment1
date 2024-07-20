@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Warm Refuge</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
@@ -13,10 +13,9 @@
   <!-- header-->
   <header>
     <i class="fas fa-bars" id="menu-icon"></i>
-    <a href="#" class="logo">A Warm Refuge</a>
+    <a href="index.html" class="logo">A Warm Refuge</a>
 
     <nav class="navbar">
-        <a href="#about_us">about us</a>
         <a href="#resources">resources</a>
         <a href="#mood_graph">mood graph</a>
         <a href="#community">community</a>
@@ -24,7 +23,59 @@
     </nav>
 
     <a href="login.html" class="fas fa-user"></a>
+
   </header>
+
+  <div class="main-content">
+      <div class="contact-section">
+          <div class="contact-form">
+              <h2>Talk directly to our Clinic Manager!</h2>
+              <form id="contactForm">
+                  <input type="text" name="name" placeholder="Name" required>
+                  <input type="email" name="email" placeholder="Email ID" required>
+                  <input type="tel" name="phone" placeholder="Phone Number" required>
+                  <label>
+                      <input type="checkbox" name="agree" required>
+                      I agree to be contacted by A Warm Refuge
+                  </label>
+                  <textarea name="message" placeholder="Type your message here" rows="4" required></textarea>
+                  <button type="submit">Submit</button>
+              </form>
+              <p>By submitting this form, you agree to the privacy policy & terms and conditions.</p>
+          </div>
+      </div>
+
+      <div class="offerings-text">
+          <h2>What We Offer</h2>
+          <p>A Warm Refuge is a welcoming online platform dedicated to mental health and community support. Our page offers users the ability to post and connect with others on a community forum, seek advice and ask questions to professionals, and track their mood using our innovative mood graph. Additionally, we provide valuable mental health information and engaging quizzes to enhance your understanding and wellbeing. Join us to find support, share experiences, and take proactive steps toward better mental health.</p>
+      </div>
+  </div>
+
+  <div class="team-section">
+      <h2>Our Team</h2>
+      <div class="team-container">
+          <div class="team-member">
+              <img src="team1.png" alt="Team Member 1">
+              <h3>Rayann Foo</h3>
+              <p>Clinic Manager</p>
+          </div>
+          <div class="team-member">
+              <img src="team2.png" alt="Team Member 2">
+              <h3>Dexter Wong</h3>
+              <p>Psychologist</p>
+          </div>
+          <div class="team-member">
+              <img src="team3.png" alt="Team Member 3">
+              <h3>Chua Qi An</h3>
+              <p>Psychologist</p>
+          </div>
+          <div class="team-member">
+              <img src="team4.png" alt="Team Member 4">
+              <h3>Chen Jingyuan</h3>
+              <p> Senior Therapist</p>
+          </div>
+      </div>
+  </div>
 
 </body>
 </html>

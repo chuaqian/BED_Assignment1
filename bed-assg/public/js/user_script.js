@@ -1,41 +1,37 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const signupForm = document.getElementById('signupUserForm');
+document.getElementById('signupUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    signupForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const number = document.getElementById('number').value;
+    const birthday = document.getElementById('birthday').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-        const formData = new FormData(signupForm);
-        const data = Object.fromEntries(formData.entries());
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
 
-        if (data.password !== data.confirmPassword) {
-            alert('Passwords do not match!');
-            return;
+    const user = { name, email, number, birthday, password };
+
+    try {
+        const response = await fetch('http://localhost:3000/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('User signed up successfully!');
+            window.location.href = 'login.html';
+        } else {
+            alert(`Error: ${result.error}`);
         }
-
-        // Remove confirmPassword from the data before sending to the server
-        delete data.confirmPassword;
-
-        try {
-            const response = await fetch('/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                console.log('User created:', result);
-                alert('User signed up successfully!');
-            } else {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-                alert('Error signing up user.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error signing up user.');
-        }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+    }
 });

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+</head>
+<body>
+    <!-- header-->
+    <header>
+        <i class="fas fa-bars" id="menu-icon"></i>
+        <a href="index.html" class="logo">A Warm Refuge</a>
+
+        <nav class="navbar">
+            <a href="#resources">resources</a>
+            <a href="#mood_graph">mood graph</a>
+            <a href="#community">community</a>
+            <a href="#quiz">quiz</a>
+        </nav>
+
+        <a href="login.html" class="fas fa-user"></a>
+    </header>
+
+    <div class="profile-container" id="profile">
+        <div class="profile-picture">
+            <img src="blank_pfp.png" alt="Profile Picture">
+        </div>
+        <div class="profile-details">
+            <h1 id="name">Hi, XXXX</h1>
+            <p id="birthday"></p>
+            <p id="email"></p>
+            <p id="phoneNumber"></p>
+            <p id="gender"></p>
+            <p id="occupation" class="professional-only"></p>
+            <p id="highestEducation" class="professional-only"></p>
+        </div>
+        <div class="profile-actions">
+            <button onclick="editProfileDetails()">Edit Profile Details</button>
+            <button onclick="logOut()">Log Out</button>
+            <button id="verifyProfessionalButton" class="professional-only">Verify Professional</button>
+        </div>
+    </div>
+</body>
+</html>
