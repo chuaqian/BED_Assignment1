@@ -1,15 +1,18 @@
-// UNIVERSAL PORT
+// UNIVERSAL PORT START (DONT CHANGE)
 
-
-const express = require('express');
+const express = require("express");
+const sql = require("mssql");
+const dbConfig = require("./dbConfig");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
+const nodemailer = require('nodemailer');
 const app = express();
 const port = process.env.PORT || 3000;
-const bodyParser = require('body-parser');
-const path = require('path');
-const mssql = require('mssql');
 const nodemailer = require('nodemailer');
-const cors = require('cors');
-const config = require('./dbConfig');
+
+// UNIVERSAL PORT END (DONT CHANGE)
+
 // RAYANN START ---------------------------------------------------------------------------------------------------
 
 const User = require('./user'); // Assuming this module handles User operations
@@ -145,6 +148,101 @@ app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
 
+// QI AN START ---------------------------------------------------------------------------------------------------
+const express = require("express");
+const sql = require("mssql");
+const dbConfig = require("./dbConfig");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
+
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CommPage.html'));
+});
+
+app.get('/api/comments', async (req, res) => {
+    const section = req.query.section;
+    const replyTo = req.query.replyTo;
+    try {
+        const query = replyTo ?
+            `SELECT * FROM comments WHERE replyTo = @replyTo` :
+            `SELECT * FROM comments WHERE section = @section AND replyTo IS NULL`;
+        const request = new sql.Request();
+        if (replyTo) {
+            request.input('replyTo', sql.Int, replyTo);
+        } else {
+            request.input('section', sql.NVarChar, section);
+        }
+        const result = await request.query(query);
+        res.json({ comments: result.recordset });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/comments', async (req, res) => {
+    const { username, content, section, replyTo } = req.body;
+    try {
+        await sql.query`INSERT INTO comments (username, content, section, replyTo) VALUES (${username}, ${content}, ${section}, ${replyTo})`;
+        res.json({ message: "Comment added successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.put('/api/comments/:id', async (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+    try {
+        await sql.query`UPDATE comments SET content = ${content} WHERE id = ${id}`;
+        res.json({ message: "Comment updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/comments/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await sql.query`DELETE FROM comments WHERE id = ${id}`;
+        res.json({ message: "Comment deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/comments/search', async (req, res) => {
+    const username = req.query.username;
+    try {
+        const result = await sql.query`SELECT * FROM comments WHERE username LIKE ${'%' + username + '%'}`;
+        res.json({ comments: result.recordset });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.listen(port, async () => {
+    try {
+        await sql.connect(dbConfig);
+        console.log("Database connection established successfully");
+    } catch (err) {
+        console.error("Database connection error:", err);
+        process.exit(1);
+    }
+
+    console.log(`Server listening on port ${port}`);
+});
+
+process.on("SIGINT", async () => {
+    console.log("Server is gracefully shutting down");
+    await sql.close();
+    console.log("Database connection closed");
+    process.exit(0);
+});
 
 // QI AN END ---------------------------------------------------------------------------------------------------
 

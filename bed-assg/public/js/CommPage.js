@@ -1,166 +1,219 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded and parsed");
+
+    const communityBtn = document.getElementById('communityBtn');
+    const professionalBtn = document.getElementById('professionalBtn');
+    const communitySection = document.getElementById('communitySection');
+    const professionalSection = document.getElementById('professionalSection');
+    const communitySearch = document.getElementById('communitySearchUsername');
+    const professionalSearch = document.getElementById('professionalSearchUsername');
+
+    communityBtn.addEventListener('click', () => {
+        communityBtn.classList.add('active');
+        professionalBtn.classList.remove('active');
+        communitySection.classList.remove('hidden');
+        professionalSection.classList.add('hidden');
+        loadComments('community');
+    });
+
+    professionalBtn.addEventListener('click', () => {
+        professionalBtn.classList.add('active');
+        communityBtn.classList.remove('active');
+        professionalSection.classList.remove('hidden');
+        communitySection.classList.add('hidden');
+        loadComments('professional');
+    });
+
+    communitySearch.addEventListener('input', () => {
+        searchComments('community');
+    });
+
+    professionalSearch.addEventListener('input', () => {
+        searchComments('professional');
+    });
+
     loadComments('community');
     loadComments('professional');
-    document.getElementById('communityBtn').addEventListener('click', () => switchSection('community'));
-    document.getElementById('professionalBtn').addEventListener('click', () => switchSection('professional'));
 });
 
-function switchSection(section) {
-    document.querySelector('.header .active').classList.remove('active');
-    document.getElementById(`${section}Btn`).classList.add('active');
-    document.querySelector('.comments-section:not(.hidden)').classList.add('hidden');
-    document.getElementById(`${section}Section`).classList.remove('hidden');
-}
-
 async function loadComments(section) {
-    const response = await fetch(`/api/comments?section=${section}`);
-    const data = await response.json();
-    const commentsList = document.getElementById(`${section}Comments`);
-    commentsList.innerHTML = '';
-    data.comments.forEach(comment => {
-        const commentElement = createCommentElement(comment, section);
-        commentsList.appendChild(commentElement);
-    });
-}
-
-async function addComment(section, replyTo = null) {
-    const usernameInput = replyTo ? document.querySelector(`.comment[data-id="${replyTo}"] .reply-username`) : document.getElementById(`${section}Username`);
-    const contentInput = replyTo ? document.querySelector(`.comment[data-id="${replyTo}"] .reply-content`) : document.getElementById(`${section}Content`);
-    const username = usernameInput.value;
-    let content = contentInput.value;
-
-    if (username.trim() === '' || content.trim() === '') {
-        alert('Please fill in both fields.');
-        return;
-    }
-
-    if (replyTo) {
-        const replyingToUsername = document.querySelector(`.comment[data-id="${replyTo}"] .username`).textContent;
-        content = `Replying to ${replyingToUsername}: ${content}`;
-    }
-
-    const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, content, section })
-    });
-
-    if (response.ok) {
-        loadComments(section);
-        if (replyTo) {
-            document.querySelector(`.comment[data-id="${replyTo}"] .reply-box`).remove();
-        } else {
-            usernameInput.value = '';
-            contentInput.value = '';
-        }
-    } else {
-        alert('Failed to add comment.');
-    }
-}
-
-async function updateComment(id, section) {
-    const commentElement = document.querySelector(`.comment[data-id="${id}"]`);
-    const contentElement = commentElement.querySelector('.content');
-    const originalContent = contentElement.textContent;
-
-    contentElement.innerHTML = `<textarea class="update-textarea">${originalContent}</textarea>`;
-    commentElement.querySelector('.update-button').style.display = 'none';
-    commentElement.querySelector('.delete-button').style.display = 'none';
-
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.classList.add('save-button');
-    saveButton.addEventListener('click', async () => {
-        const newContent = contentElement.querySelector('.update-textarea').value;
-        const response = await fetch(`/api/comments/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: newContent })
-        });
-
-        if (response.ok) {
-            loadComments(section);
-        } else {
-            alert('Failed to update comment.');
-        }
-    });
-
-    const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Cancel';
-    cancelButton.classList.add('cancel-button');
-    cancelButton.addEventListener('click', () => {
-        contentElement.textContent = originalContent;
-        saveButton.remove();
-        cancelButton.remove();
-        commentElement.querySelector('.update-button').style.display = '';
-        commentElement.querySelector('.delete-button').style.display = '';
-    });
-
-    commentElement.querySelector('.comment-actions').appendChild(saveButton);
-    commentElement.querySelector('.comment-actions').appendChild(cancelButton);
-}
-
-async function deleteComment(id, section) {
-    const response = await fetch(`/api/comments/${id}`, { method: 'DELETE' });
-    if (response.ok) {
-        loadComments(section);
-    } else {
-        alert('Failed to delete comment.');
-    }
-}
-
-async function searchComments(section) {
-    const searchInput = document.getElementById(`${section}SearchUsername`);
-    const username = searchInput.value;
-
-    if (username.trim() === '') {
-        alert('Please enter a username to search.');
-        return;
-    }
-
-    const response = await fetch(`/api/comments/search?username=${username}`);
-    const data = await response.json();
-    const commentsList = document.getElementById(`${section}Comments`);
-    commentsList.innerHTML = '';
-
-    if (data.comments.length === 0) {
-        commentsList.innerHTML = '<p>No comments found for this username.</p>';
-    } else {
+    console.log(`Loading comments for section: ${section}`);
+    try {
+        const response = await fetch(`/api/comments?section=${section}`);
+        const data = await response.json();
+        console.log('Comments data:', data);
+        const commentList = document.getElementById(`${section}Comments`);
+        commentList.innerHTML = '';
         data.comments.forEach(comment => {
-            const commentElement = createCommentElement(comment, section);
-            commentsList.appendChild(commentElement);
+            if (!comment.replyTo) {
+                const commentElement = createCommentElement(comment, section);
+                commentList.appendChild(commentElement);
+            }
         });
+    } catch (error) {
+        console.error('Error loading comments:', error);
     }
 }
 
 function createCommentElement(comment, section) {
     const commentElement = document.createElement('div');
     commentElement.classList.add('comment');
-    commentElement.setAttribute('data-id', comment.id);
+    commentElement.dataset.id = comment.id;
     commentElement.innerHTML = `
         <div class="comment-content">
-            <span class="username">${comment.username}</span>
+            <p class="username">${comment.username}</p>
             <p class="content">${comment.content}</p>
         </div>
         <div class="comment-actions">
-            <button class="reply-button" onclick="showReplyBox(${comment.id}, '${comment.username}', '${section}')">Reply</button>
+            <button class="reply-button" onclick="replyToComment(${comment.id}, '${section}')">Reply</button>
             <button class="update-button" onclick="updateComment(${comment.id}, '${section}')">Update</button>
             <button class="delete-button" onclick="deleteComment(${comment.id}, '${section}')">Delete</button>
         </div>
-        <div class="replies"></div>
+        <div class="replies hidden-replies"></div>
+        <button class="toggle-replies-button" onclick="toggleReplies(${comment.id}, '${section}')">Show Replies</button>
     `;
+    loadReplies(comment.id, section, commentElement.querySelector('.replies'));
     return commentElement;
 }
 
-function showReplyBox(commentId, username, section) {
-    const commentElement = document.querySelector(`.comment[data-id="${commentId}"]`);
+async function loadReplies(parentId, section, container) {
+    console.log(`Loading replies for comment ID: ${parentId}`);
+    try {
+        const response = await fetch(`/api/comments?replyTo=${parentId}`);
+        const data = await response.json();
+        console.log('Replies data:', data);
+        data.comments.forEach(reply => {
+            const replyElement = createCommentElement(reply, section);
+            container.appendChild(replyElement);
+        });
+    } catch (error) {
+        console.error('Error loading replies:', error);
+    }
+}
+
+async function addComment(section) {
+    const usernameInput = document.getElementById(`${section}Username`);
+    const contentInput = document.getElementById(`${section}Content`);
+    const username = usernameInput.value;
+    const content = contentInput.value;
+    if (username && content) {
+        try {
+            await fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, content, section })
+            });
+            usernameInput.value = '';
+            contentInput.value = '';
+            loadComments(section);
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
+    } else {
+        alert('Please fill in both fields.');
+    }
+}
+
+async function deleteComment(id, section) {
+    try {
+        await fetch(`/api/comments/${id}`, {
+            method: 'DELETE'
+        });
+        loadComments(section);
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+    }
+}
+
+async function updateComment(id, section) {
+    const content = prompt('Enter new content:');
+    if (content) {
+        try {
+            await fetch(`/api/comments/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+            loadComments(section);
+        } catch (error) {
+            console.error('Error updating comment:', error);
+        }
+    }
+}
+
+async function searchComments(section) {
+    const searchInput = document.getElementById(`${section}SearchUsername}`).value;
+    try {
+        const response = await fetch(`/api/comments/search?username=${searchInput}`);
+        const data = await response.json();
+        console.log('Search results:', data);
+        const commentList = document.getElementById(`${section}Comments`);
+        commentList.innerHTML = '';
+        data.comments.forEach(comment => {
+            if (!comment.replyTo) {
+                const commentElement = createCommentElement(comment, section);
+                commentList.appendChild(commentElement);
+            }
+        });
+    } catch (error) {
+        console.error('Error searching comments:', error);
+    }
+}
+
+function replyToComment(id, section) {
+    const commentElement = document.querySelector(`.comment[data-id="${id}"]`);
     const replyBox = document.createElement('div');
     replyBox.classList.add('reply-box');
     replyBox.innerHTML = `
-        <span>Replying to ${username}</span>
-        <input type="text" placeholder="Username" class="reply-username">
-        <textarea placeholder="Add a reply..." class="reply-content"></textarea>
-        <button onclick="addComment('${section}', ${commentId})">Post Reply</button>
+        <input type="text" placeholder="Username">
+        <textarea placeholder="Reply..."></textarea>
+        <button class="save-button" onclick="submitReply(${id}, '${section}')">Submit</button>
+        <button class="cancel-button" onclick="cancelReply(${id}, '${section}')">Cancel</button>
     `;
     commentElement.appendChild(replyBox);
+}
+
+function cancelReply(id, section) {
+    const replyBox = document.querySelector(`.comment[data-id="${id}"] .reply-box`);
+    replyBox.remove();
+}
+
+async function submitReply(id, section) {
+    const replyBox = document.querySelector(`.comment[data-id="${id}"] .reply-box`);
+    const username = replyBox.querySelector('input').value;
+    const content = replyBox.querySelector('textarea').value;
+    if (username && content) {
+        try {
+            await fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, content, section, replyTo: id })
+            });
+            loadComments(section);
+        } catch (error) {
+            console.error('Error submitting reply:', error);
+        }
+    } else {
+        alert('Please fill in both fields.');
+    }
+}
+
+function toggleReplies(id, section) {
+    const commentElement = document.querySelector(`.comment[data-id="${id}"]`);
+    const repliesContainer = commentElement.querySelector('.replies');
+    const toggleButton = commentElement.querySelector('.toggle-replies-button');
+
+    if (repliesContainer.classList.contains('hidden-replies')) {
+        repliesContainer.classList.remove('hidden-replies');
+        toggleButton.textContent = 'Hide Replies';
+    } else {
+        repliesContainer.classList.add('hidden-replies');
+        toggleButton.textContent = 'Show Replies';
+    }
 }
