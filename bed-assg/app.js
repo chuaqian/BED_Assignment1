@@ -9,7 +9,6 @@ const path = require("path");
 const nodemailer = require('nodemailer');
 const app = express();
 const port = process.env.PORT || 3000;
-const nodemailer = require('nodemailer');
 
 // UNIVERSAL PORT END (DONT CHANGE)
 
@@ -17,7 +16,6 @@ const nodemailer = require('nodemailer');
 
 const User = require('./user'); // Assuming this module handles User operations
 const Professional = require('./professional'); // Assuming this module handles Professional operations
-
 
 // Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
@@ -143,26 +141,7 @@ app.post('/api/forgot_password', async (req, res) => {
     }
 });
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
 // QI AN START ---------------------------------------------------------------------------------------------------
-const express = require("express");
-const sql = require("mssql");
-const dbConfig = require("./dbConfig");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const path = require("path");
-
-app.use(bodyParser.json());
-app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'CommPage.html'));
-});
 
 app.get('/api/comments', async (req, res) => {
     const section = req.query.section;
@@ -225,6 +204,16 @@ app.get('/api/comments/search', async (req, res) => {
     }
 });
 
+// QI AN END ---------------------------------------------------------------------------------------------------
+
+// DEXTER START ---------------------------------------------------------------------------------------------------
+// DEXTER END ---------------------------------------------------------------------------------------------------
+
+// JING YUAN START ---------------------------------------------------------------------------------------------------
+// JING YUAN END ---------------------------------------------------------------------------------------------------
+
+
+// Start the server - DONT CHANGE PLS 
 app.listen(port, async () => {
     try {
         await sql.connect(dbConfig);
@@ -243,11 +232,3 @@ process.on("SIGINT", async () => {
     console.log("Database connection closed");
     process.exit(0);
 });
-
-// QI AN END ---------------------------------------------------------------------------------------------------
-
-// DEXTER START ---------------------------------------------------------------------------------------------------
-// DEXTER END ---------------------------------------------------------------------------------------------------
-
-// JING YUAN START ---------------------------------------------------------------------------------------------------
-// JING YUAN END ---------------------------------------------------------------------------------------------------
