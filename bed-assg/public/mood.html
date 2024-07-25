@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/moodPage.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+</head>
+<body>
+
+    <!-- header -->
+    <header>
+        <i class="fas fa-bars" id="menu-icon"></i>
+        <a href="index.html" class="logo">A Warm Refuge</a>
+
+        <nav class="navbar">
+            <a href="#resources">Resources</a>
+            <a href="mood.html">Mood Graph</a>
+            <a href="#community">Community</a>
+            <a href="#quiz">Quiz</a>
+        </nav>
+
+        <a href="login.html" class="fas fa-user"></a>
+    </header>
+
+    <div class="mood-tracker">
+        <h1>Mood Tracker</h1>
+        <div class="mood-graph">
+            <canvas id="mood-chart"></canvas>
+        </div>
+        <div class="mood-list">
+            <h2>Mood List</h2>
+            <button id="add-mood-button">Add Mood</button>
+            <table id="mood-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Mood</th> <!-- Added Mood column -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Mood entries will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+    <div id="mood-popup" class="mood-popup hidden">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <h2>Add Mood</h2>
+            <form id="mood-form">
+                <label for="mood-date">Date:</label>
+                <input type="date" id="mood-date" required>
+                
+                <label for="mood-description">Description:</label>
+                <textarea id="mood-description" rows="3" required></textarea>
+                
+                <label>Mood:</label>
+                <div class="mood-faces">
+                    <img src="./images/happy.png" id="very-happy" alt="Very Happy">
+                    <img src="./images/smile.png" id="happy" alt="Happy">
+                    <img src="./images/neutral.png" id="neutral" alt="Neutral">
+                    <img src="./images/sad.png" id="sad" alt="Sad">
+                    <img src="./images/crying.png" id="very-sad" alt="Very Sad">
+                </div>
+                
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/moodpage.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+</html>

@@ -255,6 +255,89 @@ app.get('/api/comments/search', async (req, res) => {
 // QI AN END ---------------------------------------------------------------------------------------------------
 
 // DEXTER START ---------------------------------------------------------------------------------------------------
+
+
+const Mood = require("./mood");
+
+// Endpoint to get all moods
+app.get('/api/moods', async (req, res) => {
+    try {
+        const moods = await Mood.getAllMoods();
+        res.json(moods);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to get moods by user ID
+app.get('/api/users/:userId/moods', async (req, res) => {
+    try {
+        const moods = await Mood.getMoodsByUserId(req.params.userId);
+        res.json(moods);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to get a single mood by id
+app.get('/api/moods/:id', async (req, res) => {
+    try {
+        const mood = await Mood.getMoodById(req.params.id);
+        if (mood) {
+            res.json(mood);
+        } else {
+            res.status(404).json({ message: "Mood not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Endpoint to create a new mood
+app.post('/api/moods', async (req, res) => {
+    try {
+        const { userId, date, description, moodIndex } = req.body; // Include userId
+        const newMood = { userId, date, description, moodIndex };
+        const newMoodId = await Mood.createMood(newMood);
+        res.status(201).json({ id: newMoodId, userId, date, description, moodIndex });
+    } catch (error) {
+        console.error('Error creating new mood:', error);
+        res.status(500).json({ message: 'Failed to create new mood' });
+    }
+});
+
+// Endpoint to update an existing mood
+app.put('/api/moods/:id', async (req, res) => {
+    const { userId, date, description, moodIndex } = req.body; // Include userId
+    const id = req.params.id;
+    try {
+        const updatedMood = await Mood.updateMood(id, { userId, date, description, moodIndex });
+        if (!updatedMood) {
+            return res.status(404).send({ message: 'Mood not found' });
+        }
+        return res.status(200).json(updatedMood);
+    } catch (error) {
+        console.error('Failed to update mood:', error);
+        res.status(500).send({ message: 'Failed to update mood' });
+    }
+});
+
+
+
+// Endpoint to delete a mood
+app.delete('/api/moods/:id', async (req, res) => {
+    try {
+        const success = await Mood.deleteMood(req.params.id);
+        if (success) {
+            res.json({ message: "Mood deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Mood not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // DEXTER END ---------------------------------------------------------------------------------------------------
 
 // JING YUAN START ---------------------------------------------------------------------------------------------------
