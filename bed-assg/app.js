@@ -165,6 +165,60 @@ app.post('/api/update_profile', async (req, res) => {
     }
 });
 
+// Handle POST request to update user profile
+app.post('/api/update_profile', async (req, res) => {
+    try {
+        console.log('Request body:', req.body); // Debugging: Log the request body
+        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
+
+        const updatedUser = {
+            name,
+            email,
+            phoneNumber,
+            birthday,
+            occupation,
+            highestEducation,
+            isProfessional: 0 // Ensure isProfessional is always 0
+        };
+
+        const user = await User.updateUser(id, updatedUser);
+        res.json({ user });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Handle POST request to update professional profile
+app.post('/api/update_profile', async (req, res) => {
+    try {
+        console.log('Request body:', req.body); // Debugging
+        const { id, name, email, phoneNumber, birthday, occupation, highestEducation, isProfessional } = req.body;
+
+        const updatedUser = {
+            name,
+            email,
+            phoneNumber,
+            birthday,
+            occupation,
+            highestEducation,
+            isProfessional
+        };
+
+        if (isProfessional) {
+            const professional = await Professional.updateProfessional(id, updatedUser);
+            res.json({ professional });
+        } else {
+            const user = await User.updateUser(id, updatedUser);
+            res.json({ user });
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 app.post('/api/update_professional', async (req, res) => {
     try {
         console.log('Request body:', req.body);

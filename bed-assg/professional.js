@@ -1,6 +1,17 @@
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 
+const poolPromise = new sql.ConnectionPool(dbConfig)
+    .connect()
+    .then(pool => {
+        console.log('Connected to MSSQL');
+        return pool;
+    })
+    .catch(err => {
+        console.error('Database Connection Failed! Bad Config: ', err);
+        throw err;
+    });
+
 class Professional {
     constructor(id, name, email, password, phoneNumber, birthday, occupation, highestEducation) {
         this.id = id;
@@ -15,11 +26,11 @@ class Professional {
 
     static async getAllProfessionals() {
         try {
-            const connection = await sql.connect(dbConfig);
+            const pool = await poolPromise;
             const sqlQuery = 'SELECT * FROM Professionals';
-            const request = connection.request();
+            const request = pool.request();
             const result = await request.query(sqlQuery);
-            connection.close();
+            console.log('SQL query result for all professionals:', result.recordset); // Debugging
             return result.recordset.map(row => new Professional(
                 row.ID,
                 row.Name,
@@ -38,46 +49,78 @@ class Professional {
 
     static async getProfessionalById(id) {
         try {
-            const connection = await sql.connect(dbConfig);
+            const pool = await poolPromise;
             const sqlQuery = 'SELECT * FROM Professionals WHERE ID = @id';
-            const request = connection.request();
+            const request = pool.request();
             request.input("id", sql.Int, id);
             const result = await request.query(sqlQuery);
-            connection.close();
-            return result.recordset[0] ? new Professional(
-                result.recordset[0].ID,
-                result.recordset[0].Name,
-                result.recordset[0].Email,
-                result.recordset[0].Password,
-                result.recordset[0].PhoneNumber,
-                result.recordset[0].Birthday,
-                result.recordset[0].Occupation,
-                result.recordset[0].HighestEducation
-            ) : null;
+            console.log('SQL query result for professional by ID:', result.recordset); // Debugging
+            if (result.recordset[0]) {
+                const row = result.recordset[0];
+                return new Professional(
+                    row.ID,
+                    row.Name,
+                    row.Email,
+                    row.Password,
+                    row.PhoneNumber,
+                    row.Birthday,
+                    row.Occupation,
+                    row.HighestEducation
+                );
+            }
+            return null;
         } catch (error) {
             console.error('Error getting professional by ID:', error);
             throw error;
         }
     }
 
+    static async getProfessionalByEmail(email) {
+        try {
+            const pool = await poolPromise;
+            const sqlQuery = 'SELECT * FROM Professionals WHERE Email = @Email';
+            const request = pool.request();
+            request.input("Email", sql.NVarChar, email);
+            const result = await request.query(sqlQuery);
+            console.log('SQL query result for professional by email:', result.recordset); // Debugging
+            if (result.recordset[0]) {
+                const row = result.recordset[0];
+                return new Professional(
+                    row.ID,
+                    row.Name,
+                    row.Email,
+                    row.Password,
+                    row.PhoneNumber,
+                    row.Birthday,
+                    row.Occupation,
+                    row.HighestEducation
+                );
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting professional by email:', error);
+            throw error;
+        }
+    }
+
     static async createProfessional(newProfessional) {
         try {
-            const connection = await sql.connect(dbConfig);
+            const pool = await poolPromise;
             const sqlQuery = `
-                INSERT INTO Professionals (Name, Email, Password, PhoneNumber, Birthday, Occupation, HighestEducation)
-                VALUES (@name, @Email, @Password, @PhoneNumber, @Birthday, @Occupation, @HighestEducation);
+                INSERT INTO Professionals (Name, Email, Password, PhoneNumber, Birthday, Occupation, HighestEducation, isProfessional)
+                VALUES (@name, @Email, @Password, @PhoneNumber, @Birthday, @Occupation, @HighestEducation, @isProfessional);
                 SELECT SCOPE_IDENTITY() AS id;
             `;
-            const request = connection.request();
+            const request = pool.request();
             request.input("name", sql.NVarChar, newProfessional.name);
             request.input("email", sql.NVarChar, newProfessional.email);
-            request.input("password", sql.NVarChar, newProfessional.password); // Store hashed password
+            request.input("password", sql.NVarChar, newProfessional.password);
             request.input("phoneNumber", sql.NVarChar, newProfessional.phoneNumber);
             request.input("birthday", sql.Date, newProfessional.birthday);
             request.input("occupation", sql.NVarChar, newProfessional.occupation);
             request.input("highestEducation", sql.NVarChar, newProfessional.highestEducation);
+            request.input("isProfessional", sql.Bit, true);
             const result = await request.query(sqlQuery);
-            connection.close();
             return this.getProfessionalById(result.recordset[0].id);
         } catch (error) {
             console.error('Error creating professional:', error);
@@ -87,26 +130,37 @@ class Professional {
 
     static async updateProfessional(id, updatedProfessional) {
         try {
-            const connection = await sql.connect(dbConfig);
+            const pool = await poolPromise;
+            // Fetch the current professional details
+            const currentProfessionalQuery = 'SELECT password, isProfessional FROM Professionals WHERE id = @id';
+            const currentProfessionalRequest = pool.request();
+            currentProfessionalRequest.input("id", sql.Int, id);
+            const currentProfessionalResult = await currentProfessionalRequest.query(currentProfessionalQuery);
+
+            if (currentProfessionalResult.recordset.length === 0) {
+                throw new Error('Professional not found');
+            }
+
+            const { password, isProfessional } = currentProfessionalResult.recordset[0];
+
             const sqlQuery = `
                 UPDATE Professionals
-                SET Name = @name, Email = @Email, Password = @Password, 
-                    PhoneNumber = @PhoneNumber, Birthday = @Birthday, 
-                    Occupation = @Occupation, HighestEducation = @HighestEducation
-                WHERE ID = @id
+                SET Name = @name, Email = @Email, PhoneNumber = @PhoneNumber, Birthday = @Birthday, 
+                    Password = @Password, Occupation = @Occupation, HighestEducation = @HighestEducation, isProfessional = @IsProfessional
+                WHERE id = @id
             `;
-            const request = connection.request();
+            const request = pool.request();
             request.input("id", sql.Int, id);
             request.input("name", sql.NVarChar, updatedProfessional.name);
             request.input("email", sql.NVarChar, updatedProfessional.email);
-            request.input("password", sql.NVarChar, updatedProfessional.password); // Store hashed password
             request.input("phoneNumber", sql.NVarChar, updatedProfessional.phoneNumber);
             request.input("birthday", sql.Date, updatedProfessional.birthday);
+            request.input("password", sql.NVarChar, password); // Keep the existing password
             request.input("occupation", sql.NVarChar, updatedProfessional.occupation);
             request.input("highestEducation", sql.NVarChar, updatedProfessional.highestEducation);
+            request.input("isProfessional", sql.Bit, isProfessional); // Keep the existing isProfessional status
             await request.query(sqlQuery);
-            connection.close();
-            return this.getProfessionalById(id);
+            return await this.getProfessionalById(id);
         } catch (error) {
             console.error('Error updating professional:', error);
             throw error;
@@ -115,12 +169,11 @@ class Professional {
 
     static async deleteProfessional(id) {
         try {
-            const connection = await sql.connect(dbConfig);
-            const sqlQuery = 'DELETE FROM Professionals WHERE ID = @id';
-            const request = connection.request();
+            const pool = await poolPromise;
+            const sqlQuery = 'DELETE FROM Professionals WHERE id = @id';
+            const request = pool.request();
             request.input("id", sql.Int, id);
             const result = await request.query(sqlQuery);
-            connection.close();
             return result.rowsAffected > 0;
         } catch (error) {
             console.error('Error deleting professional:', error);
@@ -128,32 +181,7 @@ class Professional {
         }
     }
 
-    static async getProfessionalByEmail(email) {
-        try {
-            const connection = await sql.connect(dbConfig);
-            const sqlQuery = 'SELECT * FROM Professionals WHERE Email = @Email';
-            const request = connection.request();
-            request.input("Email", sql.NVarChar, email);
-            const result = await request.query(sqlQuery);
-            connection.close();
-            return result.recordset[0] ? new Professional(
-                result.recordset[0].ID,
-                result.recordset[0].Name,
-                result.recordset[0].Email,
-                result.recordset[0].Password,
-                result.recordset[0].PhoneNumber,
-                result.recordset[0].Birthday,
-                result.recordset[0].Occupation,
-                result.recordset[0].HighestEducation
-            ) : null;
-        } catch (error) {
-            console.error('Error getting professional by email:', error);
-            throw error;
-        }
-    }
-
     verifyPassword(inputPassword) {
-        // You should use bcrypt or another hashing algorithm to verify passwords
         return this.password === inputPassword;
     }
 }

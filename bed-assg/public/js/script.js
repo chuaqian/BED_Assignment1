@@ -41,6 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (resetPasswordButton) {
         resetPasswordButton.addEventListener('click', resetPassword);
     }
+
+    // Load professional profile if on professional profile page
+    if (window.location.pathname.endsWith('update_professional.html')) {
+        loadProfessionalProfileForEditing();
+        document.getElementById('editProfessionalForm').addEventListener('submit', saveProfessionalProfile);
+    }
 });
 
 // Login function
@@ -51,7 +57,7 @@ async function login(event) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('/api/login', {
+        const response = await fetch('http://localhost:3001/api/login', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,6 +73,7 @@ async function login(event) {
             window.location.href = 'profile.html';
         } else {
             const result = await response.json();
+            console.log('Login error:', result); // Debugging
             alert(result.message || 'Login failed');
         }
     } catch (error) {
@@ -105,10 +112,7 @@ function loadProfile() {
     }
 }
 
-function editProfileDetails() {
-    window.location.href = 'update_profile.html';
-}
-
+// Load profile details for editing
 function loadProfileForEditing() {
     const user = JSON.parse(localStorage.getItem('user'));
     console.log('Loaded user for editing:', user); // Debugging
@@ -144,12 +148,13 @@ async function saveProfile(event) {
         phoneNumber: document.getElementById('phoneNumber').value,
         occupation: document.getElementById('occupation').value,
         highestEducation: document.getElementById('highestEducation').value,
+        isProfessional: user.isProfessional
     };
 
     console.log('Updated user:', updatedUser); // Debugging
 
     try {
-        const response = await fetch('/api/update_profile', {
+        const response = await fetch('http://localhost:3001/api/update_profile', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -172,14 +177,7 @@ async function saveProfile(event) {
     }
 }
 
-//professionals update ----------------------------------
-document.addEventListener('DOMContentLoaded', function () {
-    if (window.location.pathname.endsWith('update_professional.html')) {
-        loadProfessionalProfileForEditing();
-        document.getElementById('editProfessionalForm').addEventListener('submit', saveProfessionalProfile);
-    }
-});
-
+// Load professional profile details for editing
 function loadProfessionalProfileForEditing() {
     const professional = JSON.parse(localStorage.getItem('professional'));
     console.log('Loaded professional for editing:', professional); // Debugging
@@ -209,12 +207,13 @@ async function saveProfessionalProfile(event) {
         phoneNumber: document.getElementById('phoneNumber').value,
         occupation: document.getElementById('occupation').value,
         highestEducation: document.getElementById('highestEducation').value,
+        isProfessional: professional.isProfessional
     };
 
     console.log('Updated professional:', updatedProfessional); // Debugging
 
     try {
-        const response = await fetch('/api/update_professional', {
+        const response = await fetch('http://localhost:3001/api/update_professional', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -248,7 +247,7 @@ async function resetPassword() {
     const email = document.getElementById('email').value;
 
     try {
-        const response = await fetch('/api/forgot_password', {
+        const response = await fetch('http://localhost:3001/api/forgot_password', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
