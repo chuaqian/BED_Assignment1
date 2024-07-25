@@ -170,6 +170,21 @@ class User {
         }
     }
 
+    static async updatePasswordByEmail(email, newPassword) {
+        try {
+            const pool = await poolPromise;
+            const sqlQuery = 'UPDATE Users SET Password = @newPassword WHERE Email = @Email';
+            const request = pool.request();
+            request.input('Email', sql.NVarChar, email);
+            request.input('newPassword', sql.NVarChar, newPassword); // Hash the password in a real scenario
+            await request.query(sqlQuery);
+            return true;
+        } catch (error) {
+            console.error('Error updating password:', error);
+            throw error;
+        }
+    }
+
     verifyPassword(inputPassword) {
         return this.password === inputPassword;
     }

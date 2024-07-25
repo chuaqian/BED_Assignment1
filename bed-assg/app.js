@@ -193,7 +193,6 @@ app.post('/api/reset_password', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
 // QI AN START ---------------------------------------------------------------------------------------------------
 
 // COMMUNITY START--------------
