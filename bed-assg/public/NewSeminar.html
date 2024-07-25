@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Seminar</title>
+    <link rel="stylesheet" href="css/NewSeminar.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Create a New Seminar</h1>
+        </div>
+        <form id="seminarForm" enctype="multipart/form-data">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="file" name="thumbnail" accept="image/*" required>
+            <button type="submit">Create</button>
+            <button type="button" onclick="location.href='/professionalsection'">Cancel</button>
+        </form>
+    </div>
+    <script src="js/NewSeminar.js"></script>
+</body>
+</html>

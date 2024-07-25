@@ -7,36 +7,21 @@
     <link rel="stylesheet" href="css/CommPage.css">
 </head>
 <body>
+    <div class="header">
+        <h1>Community Page</h1>
+        <input type="text" id="searchInput" placeholder="Search questions...">
+        <button class="professional-button" onclick="window.location.href='/professionalsection'">To Professional Section</button>
+    </div>
     <div class="container">
-        <div class="title">
-            <h1>COMMUNITY PAGE</h1>
-        </div>
-        <div class="header">
-            <button id="communityBtn" class="active">COMMUNITY</button>
-            <button id="professionalBtn">PROFESSIONAL</button>
-        </div>
-        <div id="communitySection" class="comments-section">
-            <div class="add-comment">
-                <input type="text" id="communityUsername" placeholder="Username">
-                <textarea id="communityContent" placeholder="Add a comment/message..."></textarea>
-                <button onclick="addComment('community')">Post</button>
-            </div>
-            <div class="search-bar">
-                <input type="text" id="communitySearchUsername" placeholder="Search by username...">
-            </div>
-            <div id="communityComments" class="comment-list"></div>
-        </div>
-        <div id="professionalSection" class="comments-section hidden">
-            <div class="add-comment">
-                <input type="text" id="professionalUsername" placeholder="Username">
-                <textarea id="professionalContent" placeholder="Add a comment/message..."></textarea>
-                <button onclick="addComment('professional')">Post</button>
-            </div>
-            <div class="search-bar">
-                <input type="text" id="professionalSearchUsername" placeholder="Search by username...">
-            </div>
-            <div id="professionalComments" class="comment-list"></div>
-        </div>
+        <section class="post-section">
+            <input type="text" id="username" placeholder="Username">
+            <textarea id="content" placeholder="Add a comment/message..."></textarea>
+            <button onclick="postComment()">Post</button>
+        </section>
+        <section class="questions-section">
+            <h2>Recent Questions</h2>
+            <div id="questionList" class="question-list"></div>
+        </section>
     </div>
     <script src="js/CommPage.js"></script>
 </body>

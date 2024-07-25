@@ -1,249 +1,172 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     background: url('../images/website-background.jpg') no-repeat center center fixed;
     background-size: cover;
-    color: #29537D;
-}
-
-.container {
-    width: 80%;
-    max-width: 1200px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-}
-
-.title {
-    position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-    z-index: 1;
-}
-
-.title h1 {
+    color: #333;
     margin: 0;
-    padding: 10px 0;
-    background-color: rgba(255, 255, 255, 0.8);
+    padding-top: 100px; /* Adjusted for fixed header */
 }
 
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
     display: flex;
-    justify-content: center;
-    background: #DDDDF5;
-    border-bottom: 1px solid #ddd;
-    margin-top: 60px;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }
 
-.header button {
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header input {
     flex: 1;
-    padding: 20px;
-    background: none;
+    margin: 0 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.professional-button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    transition: background 0.3s;
-    outline: none;
 }
 
-.header button.active {
-    background: #9696ee;
+.professional-button:hover {
+    background: #0056b3;
 }
 
-.comments-section {
+.container {
+    background: rgba(255, 255, 255, 0.9);
     padding: 20px;
-    height: 400px;
-    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto 0;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 600px; /* Adjust as needed */
+}
+
+.post-section, .questions-section {
     margin-top: 20px;
 }
 
-.hidden {
-    display: none;
-}
-
-.add-comment {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
-.add-comment input, .add-comment textarea {
+.post-section input, .post-section textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
     margin-bottom: 10px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #DDDDF5;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.search-bar {
-    display: flex;
-    margin-bottom: 20px;
+.post-section textarea {
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-.search-bar input {
-    flex: 1;
+.post-section button {
+    width: 100%;
     padding: 10px;
-    font-size: 16px;
-    background-color: #DDDDF5;
-    border: 1px solid #ccc;
+    background: #28a745;
+    color: white;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
-.comment-list .comment {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    background: #f9f9f9;
+.post-section button:hover {
+    background: #218838;
+}
+
+.question-list {
+    max-height: 500px; /* Adjust as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.question-item {
+    background: white;
     padding: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.comment-content {
-    flex: 1;
-}
-
-.comment-content p {
-    margin: 0;
-}
-
-.comment-content .username {
+.username {
     font-weight: bold;
 }
 
-.comment-content .content {
-    margin-top: 5px;
-}
-
 .comment-actions {
-    display: flex;
-    justify-content: flex-end;
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-button {
+.comment-actions button {
     padding: 5px 10px;
-    cursor: pointer;
     border: none;
     border-radius: 5px;
-    font-size: 14px;
-    margin-left: 10px;
-    transition: background 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 }
 
-button:hover {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.reply-button {
-    background: #4CAF50;
+.like-button {
+    background: #28a745;
     color: white;
 }
 
-.reply-button:hover {
-    background: #45a049;
+.like-button:hover {
+    background: #218838;
 }
 
-.update-button {
-    background: #f39c12;
+.dislike-button {
+    background: #dc3545;
     color: white;
 }
 
-.update-button:hover {
-    background: #e67e22;
+.dislike-button:hover {
+    background: #c82333;
 }
 
-.delete-button {
-    background: #ff4c4c;
-    color: white;
-}
-
-.delete-button:hover {
-    background: #ff1c1c;
-}
-
-.save-button, .cancel-button {
-    background: #008CBA;
-    color: white;
-    margin-left: 0;
-}
-
-.save-button {
-    background: #4CAF50;
-}
-
-.cancel-button {
-    background: #f39c12;
-}
-
-.save-button:hover, .cancel-button:hover {
-    background: #005f73;
+.replies {
+    margin-top: 10px;
+    padding-left: 20px;
 }
 
 .reply-box {
-    display: flex;
-    flex-direction: column;
     margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
 }
 
 .reply-box input, .reply-box textarea {
-    margin-bottom: 10px;
+    width: calc(100% - 20px);
     padding: 10px;
-    font-size: 14px;
-    background-color: #DDDDF5;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .reply-box button {
-    margin: 5px 0;
-}
-
-.comment {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-    background: #f9f9f9;
-    padding: 10px;
+    padding: 5px 10px;
+    border: none;
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-.comment .comment-content {
-    margin-left: 50px;
-}
-
-.comment .reply-button {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-}
-
-.comment .replies {
-    margin-left: 30px;
-    margin-top: 10px;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 .hidden-replies {
     display: none;
-}
-
-.toggle-replies-button {
-    background: #ddd;
-    color: #29537D;
-    padding: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
 }

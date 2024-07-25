@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+
+button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.seminar-detail-container {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.details {
+    margin-top: 20px;
+}
+
+.details h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.details p {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.meta span {
+    display: block;
+    margin-bottom: 5px;
+}
