@@ -4,12 +4,13 @@ body {
     background-size: cover;
     color: #333;
     margin: 0;
-    padding-top: 100px; /* Adjusted for fixed header */
+    padding-top: 120px; /* Adjusted for fixed main header and community header */
 }
 
-.header {
+/* Community page header */
+.community-header {
     position: fixed;
-    top: 0;
+    top: 70px; /* Positioned below the main navbar */
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
@@ -18,15 +19,15 @@ body {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    z-index: 1000; /* Higher than the main navbar */
 }
 
-.header h1 {
+.community-header h1 {
     margin: 0;
     font-size: 24px;
 }
 
-.header input {
+.community-header input {
     flex: 1;
     margin: 0 20px;
     padding: 10px;
@@ -47,43 +48,47 @@ body {
     background: #0056b3;
 }
 
-.container {
+/* Main container */
+.community-container {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto 0;
+    width: 70%; /* Adjusted width to 70% */
+    margin: 20px auto 0; /* Center the container horizontally */
     overflow-y: auto; /* Enable vertical scrolling */
     max-height: 600px; /* Adjust as needed */
 }
 
 .post-section, .questions-section {
     margin-top: 20px;
+    width: 100%; /* Keep the inner sections full width */
 }
 
 .post-section input, .post-section textarea {
-    width: calc(100% - 20px);
-    padding: 10px;
+    width: 100%; /* Make the input and textarea full width */
+    padding: 15px; /* Increase padding for better appearance */
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px; /* Increase font size */
 }
 
 .post-section textarea {
-    max-height: 200px;
+    max-height: 300px; /* Increase max-height for textarea */
+    min-height: 150px; /* Set a minimum height for the textarea */
     overflow-y: auto;
 }
 
 .post-section button {
     width: 100%;
-    padding: 10px;
+    padding: 15px; /* Increase padding for better appearance */
     background: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 18px; /* Increase font size */
 }
 
 .post-section button:hover {
@@ -97,14 +102,16 @@ body {
 
 .question-item {
     background: white;
-    padding: 10px;
+    padding: 15px; /* Increase padding for question items */
     margin-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Keep question items full width */
 }
 
 .username {
     font-weight: bold;
+    font-size: 18px; /* Increase font size for username */
 }
 
 .comment-actions {
@@ -115,10 +122,11 @@ body {
 }
 
 .comment-actions button {
-    padding: 5px 10px;
+    padding: 10px 15px; /* Increase padding */
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px; /* Increase font size */
 }
 
 .like-button {
@@ -152,19 +160,21 @@ body {
 }
 
 .reply-box input, .reply-box textarea {
-    width: calc(100% - 20px);
+    width: 100%; /* Make the input and textarea full width */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px; /* Increase font size */
 }
 
 .reply-box button {
-    padding: 5px 10px;
+    padding: 10px 15px; /* Increase padding */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    font-size: 14px; /* Increase font size */
 }
 
 .hidden-replies {

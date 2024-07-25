@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Page</title>
-    <link rel="stylesheet" href="css/CommPage.css">
+    <link rel="stylesheet" href="./css/CommPage.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 </head>
 <body>
-    <div class="header">
+    <!-- Main navbar -->
+    <header>
+        <i class="fas fa-bars" id="menu-icon"></i>
+        <a href="index.html" class="logo">A Warm Refuge</a>
+        <nav class="navbar">
+            <a href="#resources">Resources</a>
+            <a href="mood.html">Mood Graph</a>
+            <a href="CommPage.html">Community</a>
+            <a href="#quiz">Quiz</a>
+        </nav>
+        <a href="login.html" class="fas fa-user"></a>
+    </header>
+
+    <!-- Community page header -->
+    <div class="community-header">
         <h1>Community Page</h1>
         <input type="text" id="searchInput" placeholder="Search questions...">
         <button class="professional-button" onclick="window.location.href='/professionalsection'">To Professional Section</button>
     </div>
-    <div class="container">
+
+    <!-- Main container -->
+    <div class="community-container">
         <section class="post-section">
             <input type="text" id="username" placeholder="Username">
             <textarea id="content" placeholder="Add a comment/message..."></textarea>
@@ -23,6 +41,7 @@
             <div id="questionList" class="question-list"></div>
         </section>
     </div>
-    <script src="js/CommPage.js"></script>
+    <script src="./js/CommPage.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>

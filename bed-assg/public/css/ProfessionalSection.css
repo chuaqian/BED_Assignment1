@@ -4,12 +4,12 @@ body {
     background-size: cover;
     color: #333;
     margin: 0;
-    padding-top: 100px; /* Adjusted for fixed header */
+    padding-top: 120px; /* Adjusted for fixed main header and professional header */
 }
 
-.header {
+.professional-header {
     position: fixed;
-    top: 0;
+    top: 70px; /* Positioned below the main navbar */
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
@@ -18,15 +18,15 @@ body {
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    z-index: 1000; /* Higher than the main navbar */
 }
 
-.header h1 {
+.professional-header h1 {
     margin: 0;
     font-size: 24px;
 }
 
-.header input {
+.professional-header input {
     flex: 1;
     margin: 0 20px;
     padding: 10px;
@@ -47,14 +47,14 @@ body {
     background: #0056b3;
 }
 
-.container {
+/* Main container */
+.professional-container {
     background: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
-    margin: 20px auto 0;
+    width: 70%; /* Adjusted width to 70% */
+    margin: 20px auto 0; /* Center the container horizontally */
     overflow-y: auto; /* Enable vertical scrolling */
     max-height: 600px; /* Adjust as needed */
 }
@@ -69,7 +69,7 @@ body {
 .seminar-item {
     display: flex;
     background: white;
-    padding: 10px;
+    padding: 15px; /* Increase padding for better appearance */
     margin-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);

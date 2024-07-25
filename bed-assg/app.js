@@ -9,7 +9,9 @@ const path = require("path");
 const nodemailer = require('nodemailer');
 const app = express();
 const port = process.env.PORT || 3000;
-
+const multer = require("multer");
+// multer setup for handling file uploads
+const upload = multer({ dest: 'public/uploads/' });
 // UNIVERSAL PORT END (DONT CHANGE)
 
 // RAYANN START ---------------------------------------------------------------------------------------------------
@@ -245,17 +247,29 @@ app.post('/api/update_professional', async (req, res) => {
 
 // QI AN START ---------------------------------------------------------------------------------------------------
 
+// COMMUNITY START--------------
+// serve the community page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CommPage.html'));
+});
+
+// get comments from the database
 app.get('/api/comments', async (req, res) => {
     const section = req.query.section;
     const replyTo = req.query.replyTo;
+    const search = req.query.search;
     try {
-        const query = replyTo ?
-            `SELECT * FROM comments WHERE replyTo = @replyTo` :
-            `SELECT * FROM comments WHERE section = @section AND replyTo IS NULL`;
+        let query;
         const request = new sql.Request();
         if (replyTo) {
+            query = `SELECT c1.*, c2.username as replyToUsername FROM comments c1 LEFT JOIN comments c2 ON c1.replyTo = c2.id WHERE c1.replyTo = @replyTo`;
             request.input('replyTo', sql.Int, replyTo);
+        } else if (search) {
+            query = `SELECT * FROM comments WHERE section = @section AND (username LIKE @search OR content LIKE @search) AND replyTo IS NULL`;
+            request.input('section', sql.NVarChar, section);
+            request.input('search', sql.NVarChar, `%${search}%`);
         } else {
+            query = `SELECT * FROM comments WHERE section = @section AND replyTo IS NULL`;
             request.input('section', sql.NVarChar, section);
         }
         const result = await request.query(query);
@@ -265,6 +279,7 @@ app.get('/api/comments', async (req, res) => {
     }
 });
 
+// add a new comment to the database
 app.post('/api/comments', async (req, res) => {
     const { username, content, section, replyTo } = req.body;
     try {
@@ -275,6 +290,29 @@ app.post('/api/comments', async (req, res) => {
     }
 });
 
+// like a comment
+app.post('/api/comments/:id/like', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await sql.query`UPDATE comments SET likes = likes + 1 WHERE id = ${id}`;
+        res.json({ message: "Comment liked successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// dislike a comment
+app.post('/api/comments/:id/dislike', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await sql.query`UPDATE comments SET dislikes = dislikes + 1 WHERE id = ${id}`;
+        res.json({ message: "Comment disliked successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// update a comment
 app.put('/api/comments/:id', async (req, res) => {
     const { id } = req.params;
     const { content } = req.body;
@@ -286,25 +324,98 @@ app.put('/api/comments/:id', async (req, res) => {
     }
 });
 
+// delete a comment and its replies recursively
 app.delete('/api/comments/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        await sql.query`DELETE FROM comments WHERE id = ${id}`;
-        res.json({ message: "Comment deleted successfully" });
+        // function to delete all replies recursively
+        async function deleteReplies(commentId) {
+            const replies = await sql.query`SELECT id FROM comments WHERE replyTo = ${commentId}`;
+            for (const reply of replies.recordset) {
+                await deleteReplies(reply.id);
+            }
+            await sql.query`DELETE FROM comments WHERE id = ${commentId}`;
+        }
+
+        // start the deletion process with the main comment
+        await deleteReplies(id);
+
+        res.json({ message: "Comment and its replies deleted successfully" });
     } catch (err) {
+        console.error("Error deleting comment:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
 
+// search comments by username
 app.get('/api/comments/search', async (req, res) => {
     const username = req.query.username;
+    const section = req.query.section;
     try {
-        const result = await sql.query`SELECT * FROM comments WHERE username LIKE ${'%' + username + '%'}`;
+        const result = await sql.query`SELECT * FROM comments WHERE username LIKE ${'%' + username + '%'} AND section = ${section}`;
         res.json({ comments: result.recordset });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+// COMMUNITY END----------------
+
+// PROFESSIONAL START--------------
+// serve the professional section page
+app.get('/professionalsection', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'ProfessionalSection.html'));
+});
+
+// serve the new seminar page
+app.get('/newseminar', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'NewSeminar.html'));
+});
+
+// serve the seminar detail page
+app.get('/seminar/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'SeminarDetail.html'));
+});
+
+// get all seminars from the database
+app.get('/api/seminars', async (req, res) => {
+    const search = req.query.search || '';
+    try {
+        const result = await sql.query`SELECT * FROM seminars WHERE title LIKE ${'%' + search + '%'} OR description LIKE ${'%' + search + '%'} ORDER BY createdAt DESC`;
+        res.json({ seminars: result.recordset });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// get a specific seminar by id
+app.get('/api/seminars/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const request = new sql.Request();
+        request.input('id', sql.Int, id);
+        const result = await request.query('SELECT * FROM seminars WHERE id = @id');
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).json({ message: 'Seminar not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// add a new seminar to the database
+app.post('/api/seminars', upload.single('thumbnail'), async (req, res) => {
+    const { username, title, description } = req.body;
+    const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
+    try {
+        await sql.query`INSERT INTO seminars (username, title, description, thumbnail) VALUES (${username}, ${title}, ${description}, ${thumbnail})`;
+        res.json({ message: "Seminar added successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+// PROFESSIONAL END----------------
 
 // QI AN END ---------------------------------------------------------------------------------------------------
 
