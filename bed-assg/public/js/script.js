@@ -24,9 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
         loadProfile();
     }
 
-    // Update profile if on update profile page
+    // Update profile form if on update profile page
     if (window.location.pathname.endsWith('update_profile.html')) {
-        updateProfileForm();
+        loadProfileForEditing();
+        document.getElementById('editProfileForm').addEventListener('submit', saveProfile);
     }
 
     // Attach login event listener
@@ -60,6 +61,7 @@ async function login(event) {
 
         if (response.ok) {
             const result = await response.json();
+            console.log('Login result:', result); // Debugging
             alert('Login successful');
             localStorage.setItem('user', JSON.stringify(result.user));
             window.location.href = 'profile.html';
@@ -76,12 +78,12 @@ async function login(event) {
 // Load profile details
 function loadProfile() {
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log('Loaded user:', user); // Debugging
 
     if (user) {
         document.getElementById('name').textContent = `Hi, ${user.name}`;
         document.getElementById('birthday').textContent = `Birthday: ${new Date(user.birthday).toLocaleDateString()}`;
         document.getElementById('email').textContent = `Email: ${user.email}`;
-        document.getElementById('gender').textContent = `Gender: ${user.gender || 'Not specified'}`;
 
         if (user.phoneNumber) {
             document.getElementById('phoneNumber').textContent = `Phone Number: ${user.phoneNumber}`;
@@ -90,7 +92,7 @@ function loadProfile() {
             document.getElementById('phoneNumber').style.display = 'none';
         }
 
-        if (user.type === 'professional') {
+        if (user.isProfessional) {
             document.getElementById('occupation').textContent = `Occupation: ${user.occupation || 'Not specified'}`;
             document.getElementById('highestEducation').textContent = `Highest Level of Education: ${user.highestEducation || 'Not specified'}`;
             document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'block');
@@ -103,24 +105,21 @@ function loadProfile() {
     }
 }
 
-// Update profile form with existing data
-function updateProfileForm() {
+function editProfileDetails() {
+    window.location.href = 'update_profile.html';
+}
+
+function loadProfileForEditing() {
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log('Loaded user for editing:', user); // Debugging
 
     if (user) {
         document.getElementById('name').value = user.name;
-        document.getElementById('birthday').value = user.birthday.split('T')[0];
+        document.getElementById('birthday').value = user.birthday.split('T')[0]; // Split to get only the date part
         document.getElementById('email').value = user.email;
         document.getElementById('phoneNumber').value = user.phoneNumber || '';
 
-        const genderRadios = document.getElementsByName('gender');
-        for (const radio of genderRadios) {
-            if (radio.value === user.gender) {
-                radio.checked = true;
-            }
-        }
-
-        if (user.type === 'professional') {
+        if (user.isProfessional) {
             document.getElementById('occupation').value = user.occupation || '';
             document.getElementById('highestEducation').value = user.highestEducation || '';
             document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'block');
@@ -131,46 +130,111 @@ function updateProfileForm() {
         alert('No user data found. Please log in.');
         window.location.href = 'login.html';
     }
+}
 
-    document.getElementById('editProfileForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
+async function saveProfile(event) {
+    event.preventDefault();
 
-        const updatedUser = {
-            name: document.getElementById('name').value,
-            birthday: document.getElementById('birthday').value,
-            email: document.getElementById('email').value,
-            gender: document.querySelector('input[name="gender"]:checked').value,
-            phoneNumber: document.getElementById('phoneNumber').value,
-        };
+    const user = JSON.parse(localStorage.getItem('user'));
+    const updatedUser = {
+        id: user.id,
+        name: document.getElementById('name').value,
+        birthday: document.getElementById('birthday').value,
+        email: document.getElementById('email').value,
+        phoneNumber: document.getElementById('phoneNumber').value,
+        occupation: document.getElementById('occupation').value,
+        highestEducation: document.getElementById('highestEducation').value,
+    };
 
-        if (user.type === 'professional') {
-            updatedUser.occupation = document.getElementById('occupation').value;
-            updatedUser.highestEducation = document.getElementById('highestEducation').value;
+    console.log('Updated user:', updatedUser); // Debugging
+
+    try {
+        const response = await fetch('/api/update_profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUser),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('Profile updated successfully');
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            window.location.href = 'profile.html';
+        } else {
+            const result = await response.json();
+            alert(result.message);
         }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating profile. Please try again.');
+    }
+}
 
-        try {
-            const response = await fetch('/api/update_profile', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedUser),
-            });
+//professionals update ----------------------------------
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname.endsWith('update_professional.html')) {
+        loadProfessionalProfileForEditing();
+        document.getElementById('editProfessionalForm').addEventListener('submit', saveProfessionalProfile);
+    }
+});
 
-            if (response.ok) {
-                const result = await response.json();
-                alert('Profile updated successfully');
-                localStorage.setItem('user', JSON.stringify(updatedUser));
-                window.location.href = 'profile.html';
-            } else {
-                const result = await response.json();
-                alert(result.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error updating profile. Please try again.');
+function loadProfessionalProfileForEditing() {
+    const professional = JSON.parse(localStorage.getItem('professional'));
+    console.log('Loaded professional for editing:', professional); // Debugging
+
+    if (professional) {
+        document.getElementById('name').value = professional.name;
+        document.getElementById('birthday').value = professional.birthday.split('T')[0]; // Split to get only the date part
+        document.getElementById('email').value = professional.email;
+        document.getElementById('phoneNumber').value = professional.phoneNumber || '';
+        document.getElementById('occupation').value = professional.occupation || '';
+        document.getElementById('highestEducation').value = professional.highestEducation || '';
+    } else {
+        alert('No professional data found. Please log in.');
+        window.location.href = 'login.html';
+    }
+}
+
+async function saveProfessionalProfile(event) {
+    event.preventDefault();
+
+    const professional = JSON.parse(localStorage.getItem('professional'));
+    const updatedProfessional = {
+        id: professional.id,
+        name: document.getElementById('name').value,
+        birthday: document.getElementById('birthday').value,
+        email: document.getElementById('email').value,
+        phoneNumber: document.getElementById('phoneNumber').value,
+        occupation: document.getElementById('occupation').value,
+        highestEducation: document.getElementById('highestEducation').value,
+    };
+
+    console.log('Updated professional:', updatedProfessional); // Debugging
+
+    try {
+        const response = await fetch('/api/update_professional', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProfessional),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('Profile updated successfully');
+            localStorage.setItem('professional', JSON.stringify(updatedProfessional));
+            window.location.href = 'profile.html';
+        } else {
+            const result = await response.json();
+            alert(result.message);
         }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating profile. Please try again.');
+    }
 }
 
 // Log out function
@@ -202,8 +266,4 @@ async function resetPassword() {
         console.error('Error:', error);
         alert('An error occurred while processing your request. Please try again.');
     }
-}
-
-function editProfileDetails() {
-    window.location.href = 'update_profile.html';
 }

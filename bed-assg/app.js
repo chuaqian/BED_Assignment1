@@ -141,6 +141,54 @@ app.post('/api/forgot_password', async (req, res) => {
     }
 });
 
+//update profile
+app.post('/api/update_profile', async (req, res) => {
+    try {
+        console.log('Request body:', req.body); // Debugging: Log the request body
+        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
+
+        const updatedUser = {
+            name,
+            email,
+            phoneNumber,
+            birthday,
+            occupation,
+            highestEducation,
+            isProfessional: 0 // Ensure isProfessional is always 0
+        };
+
+        const user = await User.updateUser(id, updatedUser);
+        res.json({ user });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.post('/api/update_professional', async (req, res) => {
+    try {
+        console.log('Request body:', req.body);
+        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
+
+        const updatedProfessional = {
+            name,
+            email,
+            phoneNumber,
+            birthday,
+            occupation,
+            highestEducation,
+            isProfessional: 1 // Ensure isProfessional is always 1
+        };
+
+        const professional = await Professional.updateProfessional(id, updatedProfessional);
+        res.json({ professional });
+    } catch (error) {
+        console.error('Error updating professional:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 // QI AN START ---------------------------------------------------------------------------------------------------
 
 app.get('/api/comments', async (req, res) => {

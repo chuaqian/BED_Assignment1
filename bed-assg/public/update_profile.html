@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <i class="fas fa-bars" id="menu-icon"></i>
+        <a href="index.html" class="logo">A Warm Refuge</a>
+        <nav class="navbar">
+            <a href="#resources">resources</a>
+            <a href="#mood_graph">mood graph</a>
+            <a href="#community">community</a>
+            <a href="#quiz">quiz</a>
+        </nav>
+        <a href="login.html" class="fas fa-user"></a>
+    </header>
+
+    <!-- Form Section -->
+    <div class="container">
+        <div class="form-box">
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="input-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" id="birthday" name="birthday" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber">
+                </div>
+                <div class="input-group professional-only">
+                    <label for="occupation">Occupation</label>
+                    <input type="text" id="occupation" name="occupation">
+                </div>
+                <div class="input-group professional-only">
+                    <label for="highestEducation">Highest Education</label>
+                    <input type="text" id="highestEducation" name="highestEducation">
+                </div>
+                <div class="actions">
+                    <button type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,37 +1,48 @@
-document.getElementById('signupUserForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('signupUserForm');
 
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const number = document.getElementById('number').value;
-    const birthday = document.getElementById('birthday').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-    if (password !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-    }
+        try {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const birthday = document.getElementById('birthday').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
 
-    const user = { name, email, number, birthday, password };
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
 
-    try {
-        const response = await fetch('http://localhost:3000/api/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        });
+            const newUser = {
+                name,
+                email,
+                phoneNumber,
+                birthday,
+                password
+            };
 
-        const result = await response.json();
-        if (response.ok) {
-            alert('User signed up successfully!');
-            window.location.href = 'login.html';
-        } else {
-            alert(`Error: ${result.error}`);
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            });
+
+            if (response.ok) {
+                alert('User created successfully!');
+                form.reset();
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    });
 });
