@@ -36,10 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
         loginForm.addEventListener('submit', login);
     }
 
-    // Attach password reset event listener
-    const resetPasswordButton = document.getElementById('resetPasswordButton');
-    if (resetPasswordButton) {
-        resetPasswordButton.addEventListener('click', resetPassword);
+    // Handle reset password form submission
+    if (window.location.pathname.endsWith('reset_password.html')) {
+        document.getElementById('resetPasswordForm').addEventListener('submit', handleResetPassword);
     }
 });
 
@@ -93,7 +92,7 @@ function loadProfile() {
             document.getElementById('phoneNumber').style.display = 'none';
         }
 
-        if (user.type === 'professional') {
+        if (user.isProfessional) {
             console.log('User is professional. Displaying professional fields.'); // Debugging
             document.getElementById('occupation').textContent = `Occupation: ${user.occupation || 'Not specified'}`;
             document.getElementById('highestEducation').textContent = `Highest Level of Education: ${user.highestEducation || 'Not specified'}`;
@@ -152,14 +151,13 @@ async function saveProfile(event) {
         phoneNumber: document.getElementById('phoneNumber').value,
         occupation: document.getElementById('occupation').value,
         highestEducation: document.getElementById('highestEducation').value,
-        isProfessional: user.type === 'professional'
+        isProfessional: user.isProfessional
     };
 
     console.log('Updated user:', updatedUser); // Debugging
 
     try {
-        const endpoint = user.type === 'professional' ? 'http://localhost:3001/api/update_professional' : 'http://localhost:3001/api/update_user';
-        const response = await fetch(endpoint, {
+        const response = await fetch('http://localhost:3001/api/update_profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,7 +180,6 @@ async function saveProfile(event) {
     }
 }
 
-
 // Log out function
 function logOut() {
     localStorage.removeItem('user');
@@ -190,26 +187,48 @@ function logOut() {
 }
 
 // Password reset function
-async function resetPassword() {
-    const email = document.getElementById('email').value;
+function resetPassword() {
+    window.location.href = 'reset_password.html';
+}
+
+// Handle reset password form submission
+async function handleResetPassword(event) {
+    event.preventDefault();
+
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (newPassword !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const updatedUser = {
+        id: user.id,
+        password: newPassword
+    };
 
     try {
-        const response = await fetch('http://localhost:3001/api/forgot_password', {
+        const response = await fetch('http://localhost:3001/api/reset_password', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email })
+            body: JSON.stringify(updatedUser),
         });
 
-        const result = await response.json();
-        if (response.status === 200) {
-            alert(result.message);
+        if (response.ok) {
+            const result = await response.json();
+            alert('Password reset successfully');
+            localStorage.setItem('user', JSON.stringify(result.user));
+            window.location.href = 'profile.html';
         } else {
+            const result = await response.json();
             alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while processing your request. Please try again.');
+        alert('Error resetting password. Please try again.');
     }
 }

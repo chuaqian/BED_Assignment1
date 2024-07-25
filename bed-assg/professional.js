@@ -178,6 +178,21 @@ class Professional {
         }
     }
 
+    static async updatePasswordById(id, newPassword) {
+        try {
+            const pool = await poolPromise;
+            const sqlQuery = 'UPDATE Professionals SET Password = @newPassword WHERE ID = @id';
+            const request = pool.request();
+            request.input('id', sql.Int, id);
+            request.input('newPassword', sql.NVarChar, newPassword); // Hash the password in a real scenario
+            await request.query(sqlQuery);
+            return true;
+        } catch (error) {
+            console.error('Error updating password:', error);
+            throw error;
+        }
+    }
+
     verifyPassword(inputPassword) {
         return this.password === inputPassword;
     }

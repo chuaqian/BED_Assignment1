@@ -16,6 +16,7 @@ const upload = multer({ dest: 'public/uploads/' });
 
 // RAYANN START ---------------------------------------------------------------------------------------------------
 
+// Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -89,7 +90,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-
 // Handle POST request for forgot password
 app.post('/api/forgot_password', async (req, res) => {
     const { email } = req.body;
@@ -104,7 +104,12 @@ app.post('/api/forgot_password', async (req, res) => {
 
         const temporaryPassword = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const passwordUpdated = await User.updatePasswordByEmail(email, temporaryPassword);
+        let passwordUpdated;
+        if (user) {
+            passwordUpdated = await User.updatePasswordByEmail(email, temporaryPassword);
+        } else {
+            passwordUpdated = await Professional.updatePasswordByEmail(email, temporaryPassword);
+        }
 
         if (!passwordUpdated) {
             return res.status(500).json({ error: 'Failed to update password' });
@@ -141,41 +146,53 @@ app.post('/api/forgot_password', async (req, res) => {
 });
 
 // Handle POST request to update user profile
-app.post('/api/update_user', async (req, res) => {
+app.post('/api/update_profile', async (req, res) => {
     try {
-        const { id, name, email, phoneNumber, birthday } = req.body;
-        const updatedUser = await User.updateUser(id, {
-            name,
-            email,
-            phoneNumber,
-            birthday
-        });
+        const { id, name, email, phoneNumber, birthday, occupation, highestEducation, isProfessional } = req.body;
+        let updatedUser;
+        
+        if (isProfessional) {
+            updatedUser = await Professional.updateProfessional(id, {
+                name,
+                email,
+                phoneNumber,
+                birthday,
+                occupation,
+                highestEducation
+            });
+        } else {
+            updatedUser = await User.updateUser(id, {
+                name,
+                email,
+                phoneNumber,
+                birthday
+            });
+        }
+        
         res.json({ user: updatedUser });
     } catch (error) {
-        console.error('Error updating user profile:', error);
+        console.error('Error updating profile:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
-// Handle POST request to update professional profile
-app.post('/api/update_professional', async (req, res) => {
+// Handle POST request to reset password
+app.post('/api/reset_password', async (req, res) => {
     try {
-        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
-        const updatedProfessional = await Professional.updateProfessional(id, {
-            name,
-            email,
-            phoneNumber,
-            birthday,
-            occupation,
-            highestEducation
-        });
-        res.json({ professional: updatedProfessional });
+        const { id, password } = req.body;
+        const passwordUpdated = await User.updatePasswordById(id, password);
+
+        if (passwordUpdated) {
+            const updatedUser = await User.getUserById(id);
+            res.json({ user: updatedUser });
+        } else {
+            res.status(500).json({ message: 'Error updating password' });
+        }
     } catch (error) {
-        console.error('Error updating professional profile:', error);
+        console.error('Error resetting password:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
 
 // QI AN START ---------------------------------------------------------------------------------------------------
 
