@@ -18,7 +18,7 @@ document.getElementById('signupProfessionalForm').addEventListener('submit', asy
     const professional = { name, email, phoneNumber, birthday, occupation, highestEducation, password };
 
     try {
-        const response = await fetch('http://localhost:3000/api/professionals', {
+        const response = await fetch('http://localhost:3001/api/professionals', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,14 +26,16 @@ document.getElementById('signupProfessionalForm').addEventListener('submit', asy
             body: JSON.stringify(professional)
         });
 
-        const result = await response.json();
-        if (response.ok) {
-            alert('Professional signed up successfully!');
-            window.location.href = 'login.html';
-        } else {
+        if (!response.ok) {
+            const result = await response.json();
             alert(`Error: ${result.error}`);
+            return;
         }
+
+        alert('Professional signed up successfully!');
+        window.location.href = 'login.html';
     } catch (error) {
         console.error('Error:', error);
+        alert('Failed to sign up. Please try again later.');
     }
 });

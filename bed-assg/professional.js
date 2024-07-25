@@ -30,7 +30,6 @@ class Professional {
             const sqlQuery = 'SELECT * FROM Professionals';
             const request = pool.request();
             const result = await request.query(sqlQuery);
-            console.log('SQL query result for all professionals:', result.recordset); // Debugging
             return result.recordset.map(row => new Professional(
                 row.ID,
                 row.Name,
@@ -54,7 +53,6 @@ class Professional {
             const request = pool.request();
             request.input("id", sql.Int, id);
             const result = await request.query(sqlQuery);
-            console.log('SQL query result for professional by ID:', result.recordset); // Debugging
             if (result.recordset[0]) {
                 const row = result.recordset[0];
                 return new Professional(
@@ -82,7 +80,6 @@ class Professional {
             const request = pool.request();
             request.input("Email", sql.NVarChar, email);
             const result = await request.query(sqlQuery);
-            console.log('SQL query result for professional by email:', result.recordset); // Debugging
             if (result.recordset[0]) {
                 const row = result.recordset[0];
                 return new Professional(
@@ -136,13 +133,13 @@ class Professional {
             const currentProfessionalRequest = pool.request();
             currentProfessionalRequest.input("id", sql.Int, id);
             const currentProfessionalResult = await currentProfessionalRequest.query(currentProfessionalQuery);
-
+    
             if (currentProfessionalResult.recordset.length === 0) {
                 throw new Error('Professional not found');
             }
-
+    
             const { password, isProfessional } = currentProfessionalResult.recordset[0];
-
+    
             const sqlQuery = `
                 UPDATE Professionals
                 SET Name = @name, Email = @Email, PhoneNumber = @PhoneNumber, Birthday = @Birthday, 
@@ -165,7 +162,7 @@ class Professional {
             console.error('Error updating professional:', error);
             throw error;
         }
-    }
+    }    
 
     static async deleteProfessional(id) {
         try {

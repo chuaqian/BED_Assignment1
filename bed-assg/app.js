@@ -16,10 +16,6 @@ const upload = multer({ dest: 'public/uploads/' });
 
 // RAYANN START ---------------------------------------------------------------------------------------------------
 
-const User = require('./user'); // Assuming this module handles User operations
-const Professional = require('./professional'); // Assuming this module handles Professional operations
-
-// Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -93,6 +89,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+
 // Handle POST request for forgot password
 app.post('/api/forgot_password', async (req, res) => {
     const { email } = req.body;
@@ -143,103 +140,38 @@ app.post('/api/forgot_password', async (req, res) => {
     }
 });
 
-//update profile
-app.post('/api/update_profile', async (req, res) => {
-    try {
-        console.log('Request body:', req.body); // Debugging: Log the request body
-        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
-
-        const updatedUser = {
-            name,
-            email,
-            phoneNumber,
-            birthday,
-            occupation,
-            highestEducation,
-            isProfessional: 0 // Ensure isProfessional is always 0
-        };
-
-        const user = await User.updateUser(id, updatedUser);
-        res.json({ user });
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
 // Handle POST request to update user profile
-app.post('/api/update_profile', async (req, res) => {
+app.post('/api/update_user', async (req, res) => {
     try {
-        console.log('Request body:', req.body); // Debugging: Log the request body
-        const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
-
-        const updatedUser = {
+        const { id, name, email, phoneNumber, birthday } = req.body;
+        const updatedUser = await User.updateUser(id, {
             name,
             email,
             phoneNumber,
-            birthday,
-            occupation,
-            highestEducation,
-            isProfessional: 0 // Ensure isProfessional is always 0
-        };
-
-        const user = await User.updateUser(id, updatedUser);
-        res.json({ user });
+            birthday
+        });
+        res.json({ user: updatedUser });
     } catch (error) {
-        console.error('Error updating profile:', error);
+        console.error('Error updating user profile:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 // Handle POST request to update professional profile
-app.post('/api/update_profile', async (req, res) => {
-    try {
-        console.log('Request body:', req.body); // Debugging
-        const { id, name, email, phoneNumber, birthday, occupation, highestEducation, isProfessional } = req.body;
-
-        const updatedUser = {
-            name,
-            email,
-            phoneNumber,
-            birthday,
-            occupation,
-            highestEducation,
-            isProfessional
-        };
-
-        if (isProfessional) {
-            const professional = await Professional.updateProfessional(id, updatedUser);
-            res.json({ professional });
-        } else {
-            const user = await User.updateUser(id, updatedUser);
-            res.json({ user });
-        }
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-
 app.post('/api/update_professional', async (req, res) => {
     try {
-        console.log('Request body:', req.body);
         const { id, name, email, phoneNumber, birthday, occupation, highestEducation } = req.body;
-
-        const updatedProfessional = {
+        const updatedProfessional = await Professional.updateProfessional(id, {
             name,
             email,
             phoneNumber,
             birthday,
             occupation,
-            highestEducation,
-            isProfessional: 1 // Ensure isProfessional is always 1
-        };
-
-        const professional = await Professional.updateProfessional(id, updatedProfessional);
-        res.json({ professional });
+            highestEducation
+        });
+        res.json({ professional: updatedProfessional });
     } catch (error) {
-        console.error('Error updating professional:', error);
+        console.error('Error updating professional profile:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });

@@ -41,12 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (resetPasswordButton) {
         resetPasswordButton.addEventListener('click', resetPassword);
     }
-
-    // Load professional profile if on professional profile page
-    if (window.location.pathname.endsWith('update_professional.html')) {
-        loadProfessionalProfileForEditing();
-        document.getElementById('editProfessionalForm').addEventListener('submit', saveProfessionalProfile);
-    }
 });
 
 // Login function
@@ -57,7 +51,7 @@ async function login(event) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:3001/api/login', { // Ensure the port is correct
+        const response = await fetch('http://localhost:3001/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,11 +93,13 @@ function loadProfile() {
             document.getElementById('phoneNumber').style.display = 'none';
         }
 
-        if (user.isProfessional) {
+        if (user.type === 'professional') {
+            console.log('User is professional. Displaying professional fields.'); // Debugging
             document.getElementById('occupation').textContent = `Occupation: ${user.occupation || 'Not specified'}`;
             document.getElementById('highestEducation').textContent = `Highest Level of Education: ${user.highestEducation || 'Not specified'}`;
             document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'block');
         } else {
+            console.log('User is not professional. Hiding professional fields.'); // Debugging
             document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'none');
         }
     } else {
@@ -124,10 +120,12 @@ function loadProfileForEditing() {
         document.getElementById('phoneNumber').value = user.phoneNumber || '';
 
         if (user.isProfessional) {
+            console.log('User is professional. Displaying professional fields for editing.'); // Debugging
+            document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'block');
             document.getElementById('occupation').value = user.occupation || '';
             document.getElementById('highestEducation').value = user.highestEducation || '';
-            document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'block');
         } else {
+            console.log('User is not professional. Hiding professional fields for editing.'); // Debugging
             document.querySelectorAll('.professional-only').forEach(element => element.style.display = 'none');
         }
     } else {
@@ -136,6 +134,12 @@ function loadProfileForEditing() {
     }
 }
 
+// Edit profile details
+function editProfileDetails() {
+    window.location.href = 'update_profile.html';
+}
+
+// Save profile
 async function saveProfile(event) {
     event.preventDefault();
 
@@ -148,13 +152,14 @@ async function saveProfile(event) {
         phoneNumber: document.getElementById('phoneNumber').value,
         occupation: document.getElementById('occupation').value,
         highestEducation: document.getElementById('highestEducation').value,
-        isProfessional: user.isProfessional
+        isProfessional: user.type === 'professional'
     };
 
     console.log('Updated user:', updatedUser); // Debugging
 
     try {
-        const response = await fetch('http://localhost:3001/api/update_profile', { // Ensure the port is correct
+        const endpoint = user.type === 'professional' ? 'http://localhost:3001/api/update_professional' : 'http://localhost:3001/api/update_user';
+        const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -177,64 +182,6 @@ async function saveProfile(event) {
     }
 }
 
-// Load professional profile details for editing
-function loadProfessionalProfileForEditing() {
-    const professional = JSON.parse(localStorage.getItem('professional'));
-    console.log('Loaded professional for editing:', professional); // Debugging
-
-    if (professional) {
-        document.getElementById('name').value = professional.name;
-        document.getElementById('birthday').value = professional.birthday.split('T')[0]; // Split to get only the date part
-        document.getElementById('email').value = professional.email;
-        document.getElementById('phoneNumber').value = professional.phoneNumber || '';
-        document.getElementById('occupation').value = professional.occupation || '';
-        document.getElementById('highestEducation').value = professional.highestEducation || '';
-    } else {
-        alert('No professional data found. Please log in.');
-        window.location.href = 'login.html';
-    }
-}
-
-async function saveProfessionalProfile(event) {
-    event.preventDefault();
-
-    const professional = JSON.parse(localStorage.getItem('professional'));
-    const updatedProfessional = {
-        id: professional.id,
-        name: document.getElementById('name').value,
-        birthday: document.getElementById('birthday').value,
-        email: document.getElementById('email').value,
-        phoneNumber: document.getElementById('phoneNumber').value,
-        occupation: document.getElementById('occupation').value,
-        highestEducation: document.getElementById('highestEducation').value,
-        isProfessional: professional.isProfessional
-    };
-
-    console.log('Updated professional:', updatedProfessional); // Debugging
-
-    try {
-        const response = await fetch('http://localhost:3001/api/update_professional', { // Ensure the port is correct
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedProfessional),
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            alert('Profile updated successfully');
-            localStorage.setItem('professional', JSON.stringify(updatedProfessional));
-            window.location.href = 'profile.html';
-        } else {
-            const result = await response.json();
-            alert(result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error updating profile. Please try again.');
-    }
-}
 
 // Log out function
 function logOut() {
@@ -247,7 +194,7 @@ async function resetPassword() {
     const email = document.getElementById('email').value;
 
     try {
-        const response = await fetch('http://localhost:3001/api/forgot_password', { // Ensure the port is correct
+        const response = await fetch('http://localhost:3001/api/forgot_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
