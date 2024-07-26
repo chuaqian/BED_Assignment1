@@ -50,7 +50,7 @@ async function login(event) {
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('http://localhost:3001/api/login', {
+        const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ async function saveProfile(event) {
     console.log('Updated user:', updatedUser); // Debugging
 
     try {
-        const response = await fetch('http://localhost:3001/api/update_profile', {
+        const response = await fetch('http://localhost:3000/api/update_profile', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ async function handleResetPassword(event) {
     };
 
     try {
-        const response = await fetch('http://localhost:3001/api/reset_password', {
+        const response = await fetch('http://localhost:3000/api/reset_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

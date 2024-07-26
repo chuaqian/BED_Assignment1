@@ -16,6 +16,10 @@ const upload = multer({ dest: 'public/uploads/' });
 
 // RAYANN START ---------------------------------------------------------------------------------------------------
 
+const User = require('./user');
+const Professional = require('./professional')
+
+
 // Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Serve static files from the 'public' directory
+app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve signup pages

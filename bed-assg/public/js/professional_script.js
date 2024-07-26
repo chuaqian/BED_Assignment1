@@ -18,7 +18,7 @@ document.getElementById('signupProfessionalForm').addEventListener('submit', asy
     const professional = { name, email, phoneNumber, birthday, occupation, highestEducation, password };
 
     try {
-        const response = await fetch('http://localhost:3001/api/professionals', { // Ensure the port is correct
+        const response = await fetch('http://localhost:3000/api/professionals', { // Ensure the port is correct
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
