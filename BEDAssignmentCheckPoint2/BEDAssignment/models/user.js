@@ -1,10 +1,10 @@
 const sql = require('mssql');
 const express = require('express');
-const DBConfig = require("../DBConfig.js")
+const DBConfig = require("../DBConfig");
 
 class User {
-    constructor(ID, Username, Score) {
-        this.ID = ID;
+    constructor(id, Username, Score) {
+        this.id = id;
         this.Username = Username;
         this.Score = Score;
     }
@@ -28,19 +28,17 @@ c
     static async getUserByHighestScore() {
         const connection = await sql.connect(DBConfig);
 
-        const sqlQuery = `SELECT * FROM Users Where Score = (SELECT MAX(Score) From Users)`
+        const sqlQuery = `SELECT TOP 10 * FROM Users ORDER BY SCORE DESC;`
         const request = connection.request();
         const result = await request.query(sqlQuery);
 
         connection.close();
 
-        return result.recordset[0]
-            ? new User(
-                result.recordset[0].Id,
-                result.recordset[0].Username,
-                result.recordset[0].Score
-            )
-            : null;
+        return result.recordset.map(user => new User(
+            user.id,
+            user.Username,
+            user.Score
+        ));
     }
 }
 

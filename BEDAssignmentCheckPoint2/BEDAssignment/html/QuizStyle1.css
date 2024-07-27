@@ -153,6 +153,7 @@ header .fa-bars {
     white-space: normal;
     word-wrap: break-word;
     border: 1px solid black;
+    align-items: center;
 }
 
 .button1:hover, .button2:hover, .button3:hover, .button4:hover{
@@ -227,6 +228,13 @@ header .fa-bars {
 
 .previous:active{
     background-color: hsl(0, 0%, 60%);
+}
+
+.timer{
+    position: absolute;
+    margin-top: -250px;
+    margin-left: 1150px;
+    font-size: 16px;
 }
 
 /*.page-end-container1 {

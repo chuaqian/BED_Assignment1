@@ -133,95 +133,102 @@ header .fa-bars {
 
 .title{
     text-align: center;
-    margin-top: 484px;
-    margin-left: -424px;
+    margin-top: 784px;
+    margin-left: -600px;
+    font-size: 30px;
+    text-decoration: underline;
 }
 
 .subtitle1{
-    margin-left: 450px;
+    margin-left: 50px;
     margin-top: 50px;
+    font-size: 24px;
 }
 
 .part1{
     display: inline-block;
-    margin-left: 250px;
-    font-size: 13px;
+    margin-left: 50px;
+    font-size: 18px;
     margin-top: 25px;
 }
 
 .subtitle2{
-    margin-left: 333px;
-    margin-top: 25px;
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
 }
 
 .part2{
     display: inline-block;
-    margin-left: 250px;
-    font-size: 13px;
+    margin-left: 50px;
+    font-size: 18px;
     margin-top: 25px;
 }
 
 .subtitle3{
-    margin-left: 350px;
-    margin-top: 25px;
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
 }
 
 .part3{
     display: inline-block;
-    margin-left: 250px;
-    font-size: 13px;
+    margin-left: 50px;
+    font-size: 18px;
     margin-top: 25px;
 }
 
 .subtitle4{
-    margin-left: 390px;
-    margin-top: 25px;
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
 }
 
 .part4{
     display: inline-block;
-    margin-left: 250px;
-    font-size: 13px;
+    margin-left: 50px;
+    font-size: 18px;
     margin-top: 25px;
 }
 
 .list1{
     position: absolute;
-    display: inline-block;
-    margin-left: -500px;
-    font-size: 13px;
-    margin-top: 65px;
+    left: 75px;
+    font-size: 18px;
+    margin-top: 15px;
 }
 
 .reference1{
-    display: inline-block;
-    margin-top: 125px;
-    margin-left: 250px;
-    font-size: larger;
+    margin-left: 50px;
+    margin-top: 200px;
+    font-size: 24px;
 }
 
 .list2{
-    display: block;
-    margin-left: 264px;
+    position: absolute;
+    left: 75px;
+    font-size: 18px;
     margin-top: 15px;
-    font-size: 13px;
 }
 
 .next{
-    width: 150px;
-    height: 50px;
+    width: 200px;
+    height: 60px;
     border-radius: 30px;
     text-align: center;
-    margin-left: 1350px;
-    margin-top: 20px;
+    margin-left: 1300px;
+    margin-top: 50px;
+    border: 1px solid black;
 }
 
 .next:hover{
     background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
 }
 
 .next:active{
     background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
 }
 
 /*.page-end-container1 {

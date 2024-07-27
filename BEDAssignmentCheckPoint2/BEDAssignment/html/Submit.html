@@ -14,7 +14,7 @@
 
             <nav class="navbar">
                 <a href="#about_us">about us</a>
-                <a href="#resources">resources</a>
+                <a href="index.html">resources</a>
                 <a href="#mood_graph">mood graph</a>
                 <a href="#community">community</a>
                 <a href="#quiz">quiz</a>
@@ -23,16 +23,21 @@
             <a href="login.html" class="fas fa-user"></a>
         </header>
         <div class="content" id="content">
-            <h1 class="title" id="title">Submit</h1>
-            <p class="part1" id="part1">
-                You have come to the end of the quiz, are you sure you want to submit?<br>
-                As long as the timer have not gone to zero, you still have time to<br>
-                check your answers.
+            <h1 class="Submittitle" id="Submittitle">Submission</h1>
+            <p class="warning" id="warning">
+                You are about to submit the quiz.<br>
+                <br>
+                To go back and check you answers to the questions before submitting, press the go back button.<br>
+                However if your have used up your 15 minutes, you cannot go back to the quiz<br>
+                <br>
+                Once you click the submit button you cannot go back to the quiz.
             </p>
 
+            <p class="timer" id="timer">15:00</p>
+
             <div id="button-container" class="button-container">
-                <a href="Quiz6.html"><button id="previous" class="previous">Go Back</button></a>
-                <a><button id="Submit" class="Submit">Submit</button></a>
+                <button id="Back" class="previous">Go back</button>
+                <a href="results.html"><button id="Submit" class="Submit">Submit</button></a>
             </div>
         </div>
         <!--<div class="copyright-section">
@@ -52,5 +57,6 @@
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>

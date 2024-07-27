@@ -124,8 +124,9 @@ header .fa-bars {
 
 .title{
     text-align: center;
-    margin-top: -100px;
+    margin-top: -25px;
     font-size: 28px;
+    text-decoration: underline;
 }
 
 .part1{
@@ -134,6 +135,19 @@ header .fa-bars {
     text-align: center;
     align-items: center;
     margin-top: 50px;
+    margin-left: -500px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.instructions{
+    font-size: 18px;
+    margin-top: 50px;
+    margin-left: -480px;
+}
+
+.instructions li{
+    padding: 5px;
 }
 
 .button-container {
@@ -147,53 +161,100 @@ header .fa-bars {
 
 .next{
     display: inline-block;
-    width: 150px;
-    height: 50px;
+    position: absolute;
+    width: 200px;
+    height: 60px;
     border-radius: 30px;
-    text-align: center;
-    margin-top: 25px;
     border: 1px solid black;
+    right: 50px;
+    bottom: 25px;
+    font-size: 15px;
 }
 
 .next:hover{
     background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
 }
 
 .next:active{
     background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
 }
 
 .previous{
     display: inline-block;
-    width: 150px;
-    height: 50px;
+    position: absolute;
+    width: 200px;
+    height: 60px;
     border-radius: 30px;
-    text-align: center;
     border: 1px solid black;
+    left: 50px;
+    bottom: 25px;
+    font-size: 15px;
 }
 
 .previous:hover{
     background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
 }
 
 .previous:active{
     background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
+}
+
+.previous.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.link.disabled {
+    pointer-events: none;
+    cursor: default;
 }
 
 .Submit{
     display: inline-block;
-    width: 150px;
-    height: 50px;
+    position: absolute;
+    width: 200px;
+    height: 60px;
     border-radius: 30px;
-    text-align: center;
-    margin-top: 25px;
     border: 1px solid black;
+    right: 50px;
+    bottom: 25px;
+    font-size: 15px;
 }
 
 .Submit:hover{
     background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
 }
 
 .Submit:active{
     background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
+}
+
+.timer{
+    position: absolute;
+    font-size: 16px;
+    right: 50px;
+    top: 125px;
+}
+
+.Submittitle{
+    text-align: center;
+    margin-top: -225px;
+    font-size: 28px;
+    text-decoration: underline;
+}
+
+.warning{
+    position: absolute;
+    font-size: 20px;
+    padding: 5px;
+    left: 50px;
+    top: 250px;
 }

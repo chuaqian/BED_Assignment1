@@ -14,7 +14,7 @@
 
             <nav class="navbar">
                 <a href="#about_us">about us</a>
-                <a href="#resources">resources</a>
+                <a href="index.html">resources</a>
                 <a href="#mood_graph">mood graph</a>
                 <a href="#community">community</a>
                 <a href="#quiz">quiz</a>
@@ -25,19 +25,23 @@
         <div class="content" id="content">
             <h1 class="title" id="title">Quiz</h1>
             <p class="part1" id="part1">
-                Congratulations, you have finished reading about mental health,<br>
-                you should now have a basic understanding about mental health,<br>
-                including its causes and the types of mental health illnesses.<br>
-                Now, you can go and take a quiz Or if you want go back and re read<br>
-                the mental health information. The quiz will have 15 Questions,<br>
-                you will have 10 min to answer them, the quiz consists of<br>
-                multiple choice questions and true/false questions. To pass, you<br>
-                must get at least 85%.
+                Instructions
             </p>
+            <ol class="instructions" id="instructions">
+                <li>There are 15 questions in this quiz</li>
+                <li>The quiz consists of multiple choice and true/false questions</li>
+                <li>The quiz assesses your knowledge on mental health</li>
+                <li>Some of the mental health information is in the resources page</li>
+                <li>You have 15 minutes to complete the quiz</li>
+                <li>To pass, you must score at least 85%</li>
+                <li>Once you start the quiz, you cannot go back to the resource section</li>
+                <li>You have 1 attempt at passing this quiz</li>
+                <li>You will get a certificate if you pass</li>
+            </ol>
 
             <div id="button-container" class="button-container">
-                <a href="index.html"><button id="previous" class="previous">Mental health info</button></a>
-                <a href="Quiz1.html"><button id="next" class="next">Quiz</button></a>
+                <a href="index2.html"><button id="previous" class="previous">Go back</button></a>
+                <a><button id="quiz" class="next">Start quiz</button></a>
             </div>
         </div>
         <!--<div class="copyright-section">
@@ -57,5 +61,7 @@
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
         <script
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script src="index.js"></script>
     </body>
 </html>

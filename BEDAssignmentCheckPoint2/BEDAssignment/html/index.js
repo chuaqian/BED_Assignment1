@@ -2,31 +2,150 @@ const option1 = document.getElementById("button1");
 const option2 = document.getElementById("button2");
 const option3 = document.getElementById("button3");
 const option4 = document.getElementById("button4");
-const pageId = document.body.getAttribute('data-page-id');
 const Content = document.getElementById("content");
 const SubmitButton = document.getElementById("Submit");
-let score = 0;
+const UserScore = document.getElementById('text1')
+const HighScoreUser = document.getElementById("text2");
+const HighScore = document.getElementById("text3");
+var timer = document.getElementById("timer");
+const quizButton = document.getElementById("quiz");
+let timerInterval;
+const backButton = document.getElementById("Back");
+const linkContainer = document.getElementById('link');
+const CorrectButtons = [];
+const pageId = document.body.getAttribute('data-page-id');
 
-document.getElementById('menu-icon').addEventListener('click', function() {
+document.getElementById('menu-icon').addEventListener('click', function () {
     document.querySelector('.navbar').classList.toggle('active');
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    const timerElement = document.getElementById('timer');
+    let timerInterval;
+
+    const startTimer = (duration) => {
+        const startTime = Date.now();
+        localStorage.setItem('startTime', startTime);
+        localStorage.setItem('duration', duration);
+
+        let totalSeconds = duration;
+
+        const updateTimerDisplay = () => {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            timerElement.innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        };
+
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            totalSeconds = duration - elapsed;
+
+            if (totalSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerElement.innerHTML = "Time is up";
+                localStorage.setItem('timeIsUp', 'true');
+                disableBackButton();
+            } else {
+                updateTimerDisplay();
+            }
+        }, 1000);
+
+        updateTimerDisplay();
+    };
+
+    const disableBackButton = () => {
+        const backButton = document.getElementById('Back');
+        if (backButton) {
+            backButton.classList.add('disabled');
+            backButton.disabled = true;
+        }
+    };
+
+    const backButton = document.getElementById('Back');
+    if (backButton) {
+        backButton.addEventListener('click', function () {
+            if (!backButton.disabled) {
+                window.location.href = 'Quiz15.html';
+            }
+        });
+    }
+
+    const quizButton = document.getElementById('quiz');
+    if (quizButton) {
+        quizButton.addEventListener('click', function () {
+            localStorage.removeItem('remainingTime');
+            localStorage.removeItem('timeIsUp');
+            startTimer(900);
+        });
+    }
+
+    if (localStorage.getItem('timeIsUp') === 'true') {
+        timerElement.innerHTML = "Time is up";
+        disableBackButton();
+    } else {
+        const startTime = localStorage.getItem('startTime');
+        const duration = parseInt(localStorage.getItem('duration'));
+
+        if (startTime && duration) {
+            const elapsed = Math.floor((Date.now() - parseInt(startTime)) / 1000);
+            const remainingTime = duration - elapsed;
+
+            if (remainingTime > 0) {
+                startTimer(remainingTime);
+            } else {
+                timerElement.innerHTML = "Time is up";
+                localStorage.setItem('timeIsUp', 'true');
+                disableBackButton();
+            }
+        }
+    }
+
+    window.addEventListener('beforeunload', function () {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+    });
+});
+
 const correctAnswers = {
-    1: "button1",
-    2: "button2",
-    3: "button2",
-    4: "button3",
-    5: "button1",
-    6: "button1"
+    "1": "button1",
+    "2": "button2",
+    "3": "button2",
+    "4": "button3",
+    "5": "button1",
+    "6": "button1",
+    "7": "button3",
+    "8": "button2",
+    "9": "button2",
+    "10": "button1",
+    "11": "button1",
+    "12": "button4",
+    "13": "button2",
+    "14": "button3",
+    "15": "button2"
 };
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Log the retrieved pageId for debugging
+    console.log(`Page ID: ${pageId}`);
+
+    // Function to construct the session storage key
     const sessionStorageKey = (buttonId) => `buttonShowState_${pageId}_${buttonId}`;
 
+    // Function to retrieve button state from localStorage
     const retrieveButtonState = (buttonId) => {
-        return sessionStorage.getItem(sessionStorageKey(buttonId)) === "true";
+        const key = sessionStorageKey(buttonId);
+        console.log(`Retrieving key: ${key}`);
+        return localStorage.getItem(key) === "true";
     };
 
+    // Function to initialize button state
     const initializeButtonState = (button, buttonId) => {
         const isButtonShown = retrieveButtonState(buttonId);
         if (isButtonShown) {
@@ -34,73 +153,146 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
+    // Function to update button state on click
     const updateButtonState = (button, buttonId) => {
         button.addEventListener("click", function () {
             const isSelected = button.classList.contains("selected");
 
             if (isSelected) {
                 button.classList.remove("selected");
-                sessionStorage.setItem(sessionStorageKey(buttonId), "false");
+                localStorage.setItem(sessionStorageKey(buttonId), "false");
             } else {
-                document.querySelectorAll(`#${button.parentNode.id} button`).forEach(btn => {
-                    btn.classList.remove("selected");
-                    sessionStorage.setItem(sessionStorageKey(btn.id), "false");
-                });
-
                 button.classList.add("selected");
-                sessionStorage.setItem(sessionStorageKey(buttonId), "true");
+                localStorage.setItem(sessionStorageKey(buttonId), "true");
             }
         });
     };
 
-    const answerButtons = document.querySelectorAll(".content button");
+    // Initialize and update button states
+    const answerButtonsContainer = document.getElementById("AnswerButtons");
 
-    answerButtons.forEach((button, index) => {
-        initializeButtonState(button, `button${index + 1}`);
-        updateButtonState(button, `button${index + 1}`);
-    });
-});
+    // Ensure the container is found
+    if (answerButtonsContainer) {
+        const answerButtons = answerButtonsContainer.querySelectorAll("button");
+        console.log('Selected buttons:', answerButtons); // Add this log for debugging
 
-SubmitButton.addEventListener('click', function (event) {
-    event.preventDefault();
+        answerButtons.forEach((button) => {
+            console.log('Button ID:', button.id); // Debugging log for button IDs
+            const buttonId = button.id;
+            if (buttonId) {
+                initializeButtonState(button, buttonId);
+                updateButtonState(button, buttonId);
+            } else {
+                console.error('Button ID is missing:', button);
+            }
+        });
+    } else {
+        console.error('AnswerButtons container not found');
+    }
+    
+    const loadLogMessages = () => {
+        const logMessages = JSON.parse(localStorage.getItem('logMessages')) || [];
+        logMessages.forEach(msg => console.log(msg));
+    };
 
-    for (const [questionId, correctButtonId] of Object.entries(correctAnswers)) {
-        const selectedButton = document.querySelector(`[data-question-id="${questionId}"] .selected`);
-        if (selectedButton && selectedButton.id === correctButtonId) {
-            score += 1;
-        }
+    const addLogMessage = (msg) => {
+        const logMessages = JSON.parse(localStorage.getItem('logMessages')) || [];
+        logMessages.push(msg);
+        localStorage.setItem('logMessages', JSON.stringify(logMessages));
+    };
+
+    loadLogMessages();
+
+    if (SubmitButton) {
+        SubmitButton.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            let score = 0;
+
+            for (const [questionId, correctButtonId] of Object.entries(correctAnswers)) {
+                // Construct the key to get the selected button ID
+                const key = `buttonShowState_${pageId}_${questionId}`;
+                const selectedButtonId = localStorage.getItem(key);
+
+                console.log(`Question ${questionId}: Selected Button Key = ${key}, Selected Button ID = ${selectedButtonId}, Correct Button ID = ${correctButtonId}`);
+
+                if (selectedButtonId === correctButtonId) {
+                    score += 1;
+                }
+            }
+
+            const finalScoreMessage = `Final Score: ${score}`;
+            console.log(finalScoreMessage);
+            localStorage.setItem('Score', score);
+
+            fetch('http://localhost:3000/Submit.html', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Username: "Module", Score: score })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Score submitted successfully') {
+                        window.location.href = 'results.html';
+                    } else {
+                        alert('Error submitting score.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting score:', error);
+                    alert('Error submitting score.');
+                });
+        });
     }
 
-    const Username = "JamesBond";
-    const Score = score
+    if (window.location.pathname === '/results.html') {
+        const Score = localStorage.getItem('Score');
+        UserScore.innerText = `Your score: ${Score}`;
 
-    fetch('/submit-score', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ Username, Score })
-    })
-        .then(response => response.json())
-        .then(data => {
-            alert('Score submitted successfully!');
-        })
-        .catch(error => {
-            console.error('Error submitting score:', error);
-            alert('Error submitting score.');
-        });
 
-    fetch('/get-highest-score')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById('score').innerText = data.error;
-            } else {
-                document.getElementById('score').innerText = `Username: ${data.username}, Score: ${data.score}`;
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching score:', error);
-            document.getElementById('score').innerText = 'Error fetching score.';
+        document.getElementById('ToHighScore').addEventListener('click', function () {
+            window.location.href = '/LeaderboardScreen.html';
         });
+    }
+
+    if (quizButton) {
+        quizButton.addEventListener('click', function () {
+            localStorage.removeItem('remainingTime');
+            localStorage.removeItem('timeIsUp');
+
+            const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('buttonShowState_'));
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+
+            window.location.href = 'Quiz1.html';
+        });
+    }
+
+    if (window.location.pathname === "/LeaderboardScreen.html") {
+        fetch('/api/results')
+            .then(response => response.json())
+            .then(data => {
+                const leaderboardBody = document.getElementById('leaderboard-body');
+                leaderboardBody.innerHTML = '';
+
+                data.slice(0, 10).forEach((entry, index) => {
+                    const progressPercentage = (entry.Score / 15) * 100;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${entry.Username}</td>
+                        <td>${entry.Score}</td>
+                        <td>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: ${progressPercentage}%;"></div>
+                            </div>
+                        </td>
+                    `;
+                    leaderboardBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching leaderboard data:', error));
+    }
 });

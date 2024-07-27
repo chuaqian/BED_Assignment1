@@ -1,1 +1,0 @@
-CREATE DATABASE BED_Assignment;

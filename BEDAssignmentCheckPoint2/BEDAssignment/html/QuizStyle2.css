@@ -143,14 +143,16 @@ header .fa-bars {
 }
 
 .button1, .button2, .button3, .button4{
-    width: 190px;
-    height: 65px;
+    width: 270px;
+    height: 75px;
     border-radius: 50px;
     text-align: center;
     line-height: 50px;
     cursor: pointer;
     margin-top: 50px;
     border: 1px solid black;
+    align-items: center;
+    font-size: 13px;
 }
 
 .button1:hover, .button2:hover, .button3:hover, .button4:hover{
@@ -225,6 +227,13 @@ header .fa-bars {
 .button4.selected{
     background-color: hsl(0, 0%, 55%);
     box-shadow: 2px 2px 5px grey;
+}
+
+.timer{
+    position: absolute;
+    font-size: 16px;
+    right: 50px;
+    top: 125px;
 }
 
 /*.page-end-container1 {
