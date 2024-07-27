@@ -186,9 +186,30 @@ function logOut() {
     window.location.href = 'login.html';
 }
 
-// Password reset function
-function resetPassword() {
-    window.location.href = 'reset_password.html';
+// Forgot password
+async function forgotPassword() {
+    const email = document.getElementById('email').value;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/forgot_password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('Password reset email sent');
+        } else {
+            const result = await response.json();
+            alert(result.message || 'Failed to send password reset email');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error sending password reset email. Please try again.');
+    }
 }
 
 // Handle reset password form submission
