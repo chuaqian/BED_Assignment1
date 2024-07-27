@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadSeminars();
     document.getElementById('searchInput').addEventListener('input', searchSeminars);
+
+    // Show create seminar button only if the user is a professional
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.isProfessional) {
+        document.querySelector('.create-seminar-button').style.display = 'block';
+    } else {
+        document.querySelector('.create-seminar-button').style.display = 'none';
+    }
 });
 
 async function loadSeminars() {

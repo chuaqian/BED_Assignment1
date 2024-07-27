@@ -23,6 +23,7 @@ function displayComments(comments) {
 function createCommentItem(comment) {
     const commentItem = document.createElement('div');
     commentItem.className = 'question-item';
+    const user = JSON.parse(localStorage.getItem('user')); // Get user details from local storage
     commentItem.innerHTML = `
         <div>
             <div class="username">${comment.username}</div>
@@ -34,8 +35,7 @@ function createCommentItem(comment) {
                 <span>${new Date(comment.createdAt).toLocaleString()}</span>
                 <button onclick="showReplyBox(${comment.id})">Reply</button>
                 <button onclick="toggleReplies(${comment.id})" id="toggle-replies-${comment.id}">Show Replies</button>
-                <button onclick="updateComment(${comment.id})">Update</button>
-                <button onclick="deleteComment(${comment.id})">Delete</button>
+                ${comment.username === user.name ? `<button onclick="updateComment(${comment.id})">Update</button><button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
             </div>
             <div class="replies hidden-replies" id="replies-${comment.id}"></div>
         </div>
@@ -44,21 +44,20 @@ function createCommentItem(comment) {
 }
 
 async function postComment() {
-    const username = document.getElementById('username').value;
+    const user = JSON.parse(localStorage.getItem('user')); // Get user details from local storage
     const content = document.getElementById('content').value;
-    if (username && content) {
+    if (content) {
         await fetch('/api/comments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, content, section: 'community' })
+            body: JSON.stringify({ username: user.name, content, section: 'community' })
         });
-        document.getElementById('username').value = '';
         document.getElementById('content').value = '';
         loadComments();
     } else {
-        alert('Please fill in both fields.');
+        alert('Please fill in the field.');
     }
 }
 
@@ -76,7 +75,6 @@ function showReplyBox(id) {
     const replyBox = document.createElement('div');
     replyBox.className = 'reply-box';
     replyBox.innerHTML = `
-        <input type="text" placeholder="Username" id="reply-username-${id}">
         <textarea placeholder="Reply..." id="reply-content-${id}"></textarea>
         <button onclick="submitReply(${id})">Submit</button>
         <button onclick="cancelReply(${id})">Cancel</button>
@@ -92,19 +90,19 @@ function cancelReply(id) {
 }
 
 async function submitReply(id) {
-    const username = document.getElementById(`reply-username-${id}`).value;
+    const user = JSON.parse(localStorage.getItem('user')); // Get user details from local storage
     const content = document.getElementById(`reply-content-${id}`).value;
-    if (username && content) {
+    if (content) {
         await fetch('/api/comments', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, content, section: 'community', replyTo: id })
+            body: JSON.stringify({ username: user.name, content, section: 'community', replyTo: id })
         });
         loadComments();
     } else {
-        alert('Please fill in both fields.');
+        alert('Please fill in the field.');
     }
 }
 
@@ -167,6 +165,7 @@ async function loadReplies(id) {
 function createReplyItem(reply) {
     const replyItem = document.createElement('div');
     replyItem.className = 'reply-item';
+    const user = JSON.parse(localStorage.getItem('user')); // Get user details from local storage
     replyItem.innerHTML = `
         <div class="username">Replying to ${reply.replyToUsername}: ${reply.username}</div>
         <div class="content">${reply.content}</div>
@@ -176,8 +175,7 @@ function createReplyItem(reply) {
             <span>${new Date(reply.createdAt).toLocaleString()}</span>
             <button onclick="showReplyBox(${reply.id})">Reply</button>
             <button onclick="toggleReplies(${reply.id})" id="toggle-replies-${reply.id}">Show Replies</button>
-            <button onclick="updateComment(${reply.id})">Update</button>
-            <button onclick="deleteComment(${reply.id})">Delete</button>
+            ${reply.username === user.name ? `<button onclick="updateComment(${reply.id})">Update</button><button onclick="deleteComment(${reply.id})">Delete</button>` : ''}
         </div>
         <div class="replies hidden-replies" id="replies-${reply.id}"></div>
     `;

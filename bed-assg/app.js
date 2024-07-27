@@ -202,7 +202,7 @@ app.post('/api/reset_password', async (req, res) => {
 
 // COMMUNITY START--------------
 // serve the community page
-app.get('/', (req, res) => {
+app.get('/CommPage.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CommPage.html'));
 });
 
@@ -215,14 +215,24 @@ app.get('/api/comments', async (req, res) => {
         let query;
         const request = new sql.Request();
         if (replyTo) {
-            query = `SELECT c1.*, c2.username as replyToUsername FROM comments c1 LEFT JOIN comments c2 ON c1.replyTo = c2.id WHERE c1.replyTo = @replyTo`;
+            query = `SELECT c1.*, c2.username as replyToUsername, 
+                (SELECT COUNT(*) FROM comments c3 WHERE c3.replyTo = c1.id) AS replyCount 
+                FROM comments c1 
+                LEFT JOIN comments c2 ON c1.replyTo = c2.id 
+                WHERE c1.replyTo = @replyTo`;
             request.input('replyTo', sql.Int, replyTo);
         } else if (search) {
-            query = `SELECT * FROM comments WHERE section = @section AND (username LIKE @search OR content LIKE @search) AND replyTo IS NULL`;
+            query = `SELECT *, 
+                (SELECT COUNT(*) FROM comments c2 WHERE c2.replyTo = c1.id) AS replyCount 
+                FROM comments c1 
+                WHERE section = @section AND (username LIKE @search OR content LIKE @search) AND replyTo IS NULL`;
             request.input('section', sql.NVarChar, section);
             request.input('search', sql.NVarChar, `%${search}%`);
         } else {
-            query = `SELECT * FROM comments WHERE section = @section AND replyTo IS NULL`;
+            query = `SELECT *, 
+                (SELECT COUNT(*) FROM comments c2 WHERE c2.replyTo = c1.id) AS replyCount 
+                FROM comments c1 
+                WHERE section = @section AND replyTo IS NULL`;
             request.input('section', sql.NVarChar, section);
         }
         const result = await request.query(query);
@@ -371,6 +381,7 @@ app.post('/api/seminars', upload.single('thumbnail'), async (req, res) => {
 // PROFESSIONAL END----------------
 
 // QI AN END ---------------------------------------------------------------------------------------------------
+
 
 // DEXTER START ---------------------------------------------------------------------------------------------------
 

@@ -19,6 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Redirect to profile if user is already logged in
+    const userIcon = document.querySelector('.fa-user');
+    if (userIcon) {
+        userIcon.addEventListener('click', function (event) {
+            event.preventDefault();
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                window.location.href = 'profile.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     // Load profile if on profile page
     if (window.location.pathname.endsWith('profile.html')) {
         loadProfile();
@@ -186,30 +200,9 @@ function logOut() {
     window.location.href = 'login.html';
 }
 
-// Forgot password
-async function forgotPassword() {
-    const email = document.getElementById('email').value;
-
-    try {
-        const response = await fetch('http://localhost:3000/api/forgot_password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            alert('Password reset email sent');
-        } else {
-            const result = await response.json();
-            alert(result.message || 'Failed to send password reset email');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error sending password reset email. Please try again.');
-    }
+// Password reset function
+function resetPassword() {
+    window.location.href = 'reset_password.html';
 }
 
 // Handle reset password form submission
