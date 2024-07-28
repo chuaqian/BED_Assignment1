@@ -1,6 +1,6 @@
 const { error } = require("console");
-const User = require("../models/user.js");
-const DBConfig = require("../DBConfig.js");
+const User = require("./user");
+const dbConfig = require("./dbConfig");
 
 const getHighestScore = async (req, res) => {
     try {

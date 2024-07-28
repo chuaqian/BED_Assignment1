@@ -176,7 +176,7 @@ class User {
             const sqlQuery = 'UPDATE Users SET Password = @newPassword WHERE Email = @Email';
             const request = pool.request();
             request.input('Email', sql.NVarChar, email);
-            request.input('newPassword', sql.NVarChar, newPassword); // Hash the password in a real scenario
+            request.input('newPassword', sql.NVarChar, newPassword); 
             await request.query(sqlQuery);
             return true;
         } catch (error) {
@@ -189,44 +189,40 @@ class User {
         return this.password === inputPassword;
     }
 
-    constructor(ID, Username, Score) {
-        this.ID = ID;
-        this.Username = Username;
-        this.Score = Score;
-    }
-
-    static async createUserEntry(NewUserEntry) {
-        const connection = await sql.connect(DBConfig);
-
-        const sqlQuery = `INSERT INTO Users (Username, Score) VALUES (@Username, @Score); SELECT SCOPE_IDENTITY() AS id;`;
-
-        const request = connection.request();
-        request.input("Username", NewUserEntry.Username);
-        request.input("Score", NewUserEntry.Score);
-
-        const result = await request.query(sqlQuery);
-c
-        connection.close();
-
-        return this.GetUserById(result.recordset[0].id);
+    static async createUserEntry(newUserEntry) {
+        try {
+            const pool = await poolPromise;
+            const sqlQuery = `INSERT INTO Users (Username, Score) VALUES (@Username, @Score); SELECT SCOPE_IDENTITY() AS id;`;
+            const request = pool.request();
+            request.input("Username", sql.NVarChar, newUserEntry.Username);
+            request.input("Score", sql.Int, newUserEntry.Score);
+            const result = await request.query(sqlQuery);
+            return this.getUserById(result.recordset[0].id);
+        } catch (error) {
+            console.error('Error creating user entry:', error);
+            throw error;
+        }
     }
 
     static async getUserByHighestScore() {
-        const connection = await sql.connect(DBConfig);
-
-        const sqlQuery = `SELECT * FROM Users Where Score = (SELECT MAX(Score) From Users)`
-        const request = connection.request();
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.recordset[0]
-            ? new User(
-                result.recordset[0].Id,
-                result.recordset[0].Username,
-                result.recordset[0].Score
-            )
-            : null;
+        try {
+            const pool = await poolPromise;
+            const sqlQuery = `SELECT * FROM Users WHERE Score = (SELECT MAX(Score) FROM Users)`;
+            const request = pool.request();
+            const result = await request.query(sqlQuery);
+            if (result.recordset[0]) {
+                const row = result.recordset[0];
+                return new User(
+                    row.id,
+                    row.Username,
+                    row.Score
+                );
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting user by highest score:', error);
+            throw error;
+        }
     }
 }
 

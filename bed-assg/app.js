@@ -569,6 +569,8 @@ app.delete('/api/moods/:id', async (req, res) => {
 
 // JING YUAN START ---------------------------------------------------------------------------------------------------
 
+const UserController = require('./userController'); 
+
 app.post('/submit-score', async (req, res) => {
     const { Username, Score } = req.body;
 
@@ -594,12 +596,6 @@ app.post('/submit-score', async (req, res) => {
 });
 
 app.get('/get-highest-score', UserController.getHighestScore);
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}.`);
-});
-
-
 
 // JING YUAN END ---------------------------------------------------------------------------------------------------
 
