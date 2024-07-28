@@ -71,3 +71,13 @@ CREATE TABLE seminar_participants (
     CONSTRAINT FK_SeminarParticipants_Seminar FOREIGN KEY (seminarId) REFERENCES seminars(id),
     CONSTRAINT FK_SeminarParticipants_User FOREIGN KEY (userId) REFERENCES Users(id)
 );
+
+-- Insert high score into User table 
+INSERT INTO Users (Username, Score)
+VALUES
+  ('IronMan', '15'),
+  ('Hulk', '3'),
+  ('Dantdm', '13'),
+  ('Percy Jackson', '7'),
+  ('Thinknoodles', '9'),
+  ('Thor', '5');
