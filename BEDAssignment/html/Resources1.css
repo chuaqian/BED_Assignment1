@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: none;
+    transition: .2s linear;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: shown;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('istockphoto-1156178759-612x612_\(1\)-transformed.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 2rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+header .logo {
+    font-size: 3rem;
+    color: #29537D;
+    font-weight: bolder;
+}
+
+header .navbar a {
+    font-size: 2rem;
+    padding: 0 2.5rem;
+    color: #666;
+}
+
+header .navbar a:hover {
+    color: #29537D;
+}
+
+header .fa-user {
+    font-size: 4rem;
+    color: #333;
+    margin-left: 1.5rem;
+}
+
+header .fa-user:hover {
+    color: #29537D;
+}
+
+header .fa-bars {
+    font-size: 3rem;
+    color: #333;
+    border-radius: .5rem;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border: .1rem solid rgba(0, 0, 0, .3);
+    display: none;
+}
+
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .navbar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    header .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+}
+
+.background1{
+    width: 100%;
+    height: auto;
+}
+
+.title{
+    text-align: center;
+    margin-top: 784px;
+    margin-left: -600px;
+    font-size: 30px;
+    text-decoration: underline;
+}
+
+.subtitle1{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+.part1{
+    display: inline-block;
+    margin-left: 50px;
+    font-size: 18px;
+    margin-top: 25px;
+}
+
+.subtitle2{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+.part2{
+    display: inline-block;
+    margin-left: 50px;
+    font-size: 18px;
+    margin-top: 25px;
+}
+
+.subtitle3{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+.part3{
+    display: inline-block;
+    margin-left: 50px;
+    font-size: 18px;
+    margin-top: 25px;
+}
+
+.subtitle4{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+.part4{
+    display: inline-block;
+    margin-left: 50px;
+    font-size: 18px;
+    margin-top: 25px;
+}
+
+.list1{
+    position: absolute;
+    left: 75px;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.reference1{
+    margin-left: 50px;
+    margin-top: 200px;
+    font-size: 24px;
+}
+
+.list2{
+    position: absolute;
+    left: 75px;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.next{
+    width: 200px;
+    height: 60px;
+    border-radius: 30px;
+    text-align: center;
+    margin-left: 1300px;
+    margin-top: 50px;
+    border: 1px solid black;
+}
+
+.next:hover{
+    background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
+}
+
+.next:active{
+    background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
+}
+
+/*.page-end-container1 {
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid lightgray;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: white;
+}
+
+.about-uniqlo {
+    margin-left: 50px;
+}
+
+.Help {
+    margin-left: 175px;
+    margin-top: 26px;
+}
+
+.Account{
+    margin-top: -48px;
+    margin-left: 150px;
+}
+
+.E-Newsletter{
+    margin-top: 5px;
+    margin-left: 150px;
+}
+
+.social{
+    margin-top:-84px;
+    margin-left: 125px;
+}
+
+.copyright-section {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    border: 1px solid lightgray;
+    border-bottom: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: white;
+}
+
+.copyright-claims {
+    margin-left: 50px;
+    color: gray;
+}
+
+.Terms-of-use
+{
+    color: gray;
+    margin-left: 700px;
+}
+
+.Privacy-Policy{
+    color: gray;
+    margin-left: 25px;
+}*/

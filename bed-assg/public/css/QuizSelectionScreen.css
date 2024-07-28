@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: none;
+    transition: .2s linear;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #f4f6f9;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 2rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+header .logo {
+    font-size: 3rem;
+    color: #333;
+}
+
+header .navbar a {
+    margin-left: 2rem;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+header .navbar a:hover {
+    color: #007bff;
+}
+
+header .fas.fa-user {
+    font-size: 2rem;
+    color: #333;
+}
+
+main {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.6rem;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: #007bff;
+    padding: 20px;
+    color: #fff;
+}
+
+.card-title {
+    font-size: 2rem;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.text-muted {
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+}
+
+.text-muted svg {
+    margin-right: 10px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+}
+
+.badge {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-primary {
+    color: #007bff;
+}
+
+.icon-yellow {
+    color: #ffc107;
+}
+
+.icon-red {
+    color: #dc3545;
+}

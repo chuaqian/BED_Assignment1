@@ -1,0 +1,300 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: none;
+    transition: .2s linear;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: shown;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 2rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+header .logo {
+    font-size: 3rem;
+    color: #29537D;
+    font-weight: bolder;
+}
+
+header .navbar a {
+    font-size: 2rem;
+    padding: 0 2.5rem;
+    color: #666;
+}
+
+header .navbar a:hover {
+    color: #29537D;
+}
+
+header .fa-user {
+    font-size: 4rem;
+    color: #333;
+    margin-left: 1.5rem;
+}
+
+header .fa-user:hover {
+    color: #29537D;
+}
+
+header .fa-bars {
+    font-size: 3rem;
+    color: #333;
+    border-radius: .5rem;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border: .1rem solid rgba(0, 0, 0, .3);
+    display: none;
+}
+
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .navbar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    header .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+}
+
+.header1{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.subheader1{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.AnswerButtons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.button1, .button2, .button3, .button4{
+    width: 250px;
+    height: 85px;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    margin-top: 50px;
+    white-space: normal;
+    word-wrap: break-word;
+    border: 1px solid black;
+    align-items: center;
+}
+
+.button1:hover, .button2:hover, .button3:hover, .button4:hover{
+    background-color: hsl(0, 0%, 70%);
+}
+
+.button1:active, .button2:active, .button3:active, .button4:active{
+    background-color: hsl(0, 0%, 60%);
+}
+
+.next{
+    display: inline-block;
+    width: 200px;
+    height: 60px;
+    border-radius: 60px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.next:hover{
+    background-color: hsl(0, 0%, 70%);
+}
+
+.next:active{
+    background-color: hsl(0, 0%, 60%);
+}
+
+.button1.selected{
+    background-color: hsl(0, 0%, 55%);
+    box-shadow: 2px 2px 5px grey;
+}
+
+.button2.selected{
+    background-color: hsl(0, 0%, 55%);
+    box-shadow: 2px 2px 5px grey;
+}
+
+.button3.selected{
+    background-color: hsl(0, 0%, 55%);
+    box-shadow: 2px 2px 5px grey
+}
+
+.button4.selected{
+    background-color: hsl(0, 0%, 55%);
+    box-shadow: 2px 2px 5px grey;
+}
+
+.previous{
+    display: inline-block;
+    width: 200px;
+    height: 60px;
+    border-radius: 60px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.previous:hover{
+    background-color: hsl(0, 0%, 70%);
+}
+
+.previous:active{
+    background-color: hsl(0, 0%, 60%);
+}
+
+.timer{
+    position: absolute;
+    margin-top: -250px;
+    margin-left: 1150px;
+    font-size: 16px;
+}
+
+/*.page-end-container1 {
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    border: 1px solid lightgray;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: white;
+}
+
+.about-uniqlo {
+    margin-left: 50px;
+}
+
+.Help {
+    margin-left: 175px;
+    margin-top: 26px;
+}
+
+.Account{
+    margin-top: -48px;
+    margin-left: 150px;
+}
+
+.E-Newsletter{
+    margin-top: 5px;
+    margin-left: 150px;
+}
+
+.social{
+    margin-top:-84px;
+    margin-left: 125px;
+}
+
+.copyright-section {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    border: 1px solid lightgray;
+    border-bottom: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-top: white;
+}
+
+.copyright-claims {
+    margin-left: 50px;
+    color: gray;
+}
+
+.Terms-of-use
+{
+    color: gray;
+    margin-left: 700px;
+}
+
+.Privacy-Policy{
+    color: gray;
+    margin-left: 25px;
+}*/

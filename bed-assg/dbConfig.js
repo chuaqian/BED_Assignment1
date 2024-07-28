@@ -1,11 +1,11 @@
 module.exports = {
-    user: "bed", 
+    user: "bed",
     password: "bed",
     server: "localhost",
     database: "bed",
     trustServerCertificate: true,
     options: {
-        port: 1433, 
-        connectionTimeout: 60000 
+        port: 1433,
+        connectionTimeout: 60000
     }
-  };
+};
