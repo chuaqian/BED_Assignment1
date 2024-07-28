@@ -23,9 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     margin: 0;
-    height: 100vh;
 }
 
 /* Header styles */
@@ -219,12 +217,12 @@ header .fa-bars {
     width: 100%;
 }
 
-.contact-form button:hover {
+contact-form button:hover {
     background-color: #FFD6DC;
     color: #29537D;
 }
 
-.contact-form p {
+contact-form p {
     color: #666;
     font-size: 14px;
     margin-top: 10px;
@@ -331,12 +329,11 @@ p a:hover {
 .container {
     width: 100%;
     max-width: 500px;
-    margin-top: 2rem; /* Adjust for fixed header */
+    margin-top: calc(4rem + 8rem); /* Adjust for fixed header */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%; /* Take full height to center vertically */
 }
 
 .form-box,
