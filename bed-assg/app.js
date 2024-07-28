@@ -18,7 +18,15 @@ const upload = multer({ dest: 'public/uploads/' });
 
 const User = require('./user');
 const Professional = require('./professional')
-
+// Middleware to set correct MIME types for CSS and JS
+app.use((req, res, next) => {
+    if (req.url.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+    } else if (req.url.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+    }
+    next();
+});
 
 // Middleware to parse JSON and URL-encoded data
 app.use(bodyParser.json());
@@ -351,7 +359,7 @@ app.get('/seminar/:id', (req, res) => {
 app.get('/api/seminars', async (req, res) => {
     const search = req.query.search || '';
     try {
-        const result = await sql.query`SELECT * FROM seminars WHERE title LIKE ${'%' + search + '%'} OR description LIKE ${'%' + search + '%'} ORDER BY createdAt DESC`;
+        const result = await sql.query`SELECT s.*, p.Name AS username FROM seminars s INNER JOIN Professionals p ON s.userId = p.ID WHERE s.title LIKE ${'%' + search + '%'} OR s.description LIKE ${'%' + search + '%'} ORDER BY s.createdAt DESC`;
         res.json({ seminars: result.recordset });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -364,7 +372,12 @@ app.get('/api/seminars/:id', async (req, res) => {
     try {
         const request = new sql.Request();
         request.input('id', sql.Int, id);
-        const result = await request.query('SELECT * FROM seminars WHERE id = @id');
+        const result = await request.query(`
+            SELECT s.id, s.userId, s.username, s.title, s.description, s.thumbnail, s.createdAt,
+                   (SELECT COUNT(*) FROM seminar_participants sp WHERE sp.seminarId = s.id) AS participantCount 
+            FROM seminars s
+            WHERE s.id = @id
+        `);
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);
         } else {
@@ -377,18 +390,95 @@ app.get('/api/seminars/:id', async (req, res) => {
 
 // add a new seminar to the database
 app.post('/api/seminars', upload.single('thumbnail'), async (req, res) => {
-    const { username, title, description } = req.body;
+    const { title, description } = req.body;
+    const user = JSON.parse(req.body.user); // parse the user object from the form data
+    const userId = user.id;
+    const username = user.name; // get the username from the user object
     const thumbnail = req.file ? `/uploads/${req.file.filename}` : null;
+
     try {
-        await sql.query`INSERT INTO seminars (username, title, description, thumbnail) VALUES (${username}, ${title}, ${description}, ${thumbnail})`;
+        await sql.query`INSERT INTO seminars (userId, username, title, description, thumbnail) VALUES (${userId}, ${username}, ${title}, ${description}, ${thumbnail})`;
         res.json({ message: "Seminar added successfully" });
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// join a seminar
+app.post('/api/seminars/:id/join', async (req, res) => {
+    const { id } = req.params;
+    const { user } = req.body;
+    const userId = user.id;
+
+    try {
+        // check if the user has already joined the seminar
+        const checkQuery = await sql.query`SELECT * FROM seminar_participants WHERE seminarId = ${id} AND userId = ${userId}`;
+        if (checkQuery.recordset.length > 0) {
+            return res.status(400).json({ error: 'You have already joined this seminar' });
+        }
+
+        // add the user to the seminar participants
+        await sql.query`INSERT INTO seminar_participants (seminarId, userId) VALUES (${id}, ${userId})`;
+
+        // increment the participant count in the seminars table
+        await sql.query`UPDATE seminars SET participantCount = participantCount + 1 WHERE id = ${id}`;
+
+        res.json({ message: "Successfully joined the seminar" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// update a seminar
+app.put('/api/seminars/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, description, thumbnail } = req.body;
+    try {
+        await sql.query`UPDATE seminars SET title = ${title}, description = ${description}, thumbnail = ${thumbnail} WHERE id = ${id}`;
+        res.json({ message: "Seminar updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// delete a seminar
+app.delete('/api/seminars/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Check if the seminar exists
+        const seminarCheck = await sql.query`SELECT * FROM seminars WHERE id = ${id}`;
+        if (seminarCheck.recordset.length === 0) {
+            return res.status(404).json({ message: "Seminar not found" });
+        }
+
+        // Delete related records in seminar_participants table first
+        const participantDeleteResult = await sql.query`DELETE FROM seminar_participants WHERE seminarId = ${id}`;
+        console.log('Deleted participants:', participantDeleteResult.rowsAffected);
+
+        // Delete the seminar
+        const seminarDeleteResult = await sql.query`DELETE FROM seminars WHERE id = ${id}`;
+        console.log('Deleted seminar:', seminarDeleteResult.rowsAffected);
+
+        // Check if the seminar was successfully deleted
+        if (seminarDeleteResult.rowsAffected[0] > 0) {
+            res.json({ message: "Seminar deleted successfully" });
+        } else {
+            res.status(500).json({ message: "Failed to delete seminar" });
+        }
+    } catch (err) {
+        console.error("Error deleting seminar:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
 // PROFESSIONAL END----------------
 
 // QI AN END ---------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 // DEXTER START ---------------------------------------------------------------------------------------------------

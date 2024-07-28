@@ -26,13 +26,16 @@ button:hover {
 }
 
 .thumbnail img {
-    max-width: 100%;
+    width: 150px;
     height: auto;
     border-radius: 5px;
+    float: left;
+    margin-right: 20px;
 }
 
 .details {
     margin-top: 20px;
+    overflow: hidden;
 }
 
 .details h1 {

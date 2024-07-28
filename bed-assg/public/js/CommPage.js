@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is logged in
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        alert('User not logged in!');
+        window.location.href = 'login.html';
+    }
+
+    // Load comments and add event listener to search input
     loadComments();
     document.getElementById('searchInput').addEventListener('input', searchComments);
 });

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadSeminars();
-    document.getElementById('searchInput').addEventListener('input', searchSeminars);
+    loadSeminars(); // load seminars when the page is loaded
+    document.getElementById('searchInput').addEventListener('input', searchSeminars); // add event listener to search input
 
-    // Show create seminar button only if the user is a professional
+    // show create seminar button only if the user is a professional
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.isProfessional) {
         document.querySelector('.create-seminar-button').style.display = 'block';
@@ -11,12 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// this function fetches and displays seminars
 async function loadSeminars() {
     const response = await fetch('/api/seminars');
     const data = await response.json();
     displaySeminars(data.seminars);
 }
 
+// this function displays seminars on the page
 function displaySeminars(seminars) {
     const seminarList = document.getElementById('seminarList');
     seminarList.innerHTML = '';
@@ -40,6 +42,7 @@ function displaySeminars(seminars) {
     });
 }
 
+// this function searches seminars based on the search input
 async function searchSeminars() {
     const searchInput = document.getElementById('searchInput').value;
     let url = `/api/seminars?search=${searchInput}`;
