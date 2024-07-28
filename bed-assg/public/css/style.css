@@ -15,6 +15,7 @@ html {
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
     overflow-x: hidden;
+    height: 100%;
 }
 
 body {
@@ -22,7 +23,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     margin: 0;
+    height: 100vh;
 }
 
 /* Header styles */
@@ -76,13 +79,15 @@ header .fa-bars {
     display: none;
 }
 
+/* Main content styles */
 .main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10rem; /* Adjust for fixed header */
-    width: 100%;
+    margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
+    width: 90%;
     max-width: 1200px;
+    padding: 0 2rem; /* Add padding for smaller screens */
 }
 
 .image-section {
@@ -99,7 +104,7 @@ header .fa-bars {
 }
 
 .offerings-text {
-    width: 90%;
+    width: 100%;
     padding: 20px;
     color: #29537D; /* dark blue */
     font-size: 1.6rem;
@@ -158,6 +163,102 @@ header .fa-bars {
     color: #666; /* Match color scheme */
 }
 
+.contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin-top: 2rem;
+}
+
+.contact-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+}
+
+.contact-form h2 {
+    margin-bottom: 20px;
+    font-size: 25px;
+    color: #29537D; /* dark blue */
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form input[type="tel"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.contact-form label {
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contact-form label input {
+    margin-right: 10px;
+}
+
+.contact-form button {
+    background-color: #29537D;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.contact-form button:hover {
+    background-color: #FFD6DC;
+    color: #29537D;
+}
+
+.contact-form p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+p {
+    margin-top: 15px;
+    color: #666;
+    font-size: 15px;
+}
+
+p a {
+    color: #29537D;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+p a:hover {
+    color: #FFD6DC;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .fa-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Media queries */
 @media (max-width: 991px) {
     html {
         font-size: 55%;
@@ -193,6 +294,187 @@ header .fa-bars {
         margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
     }
 
+    .contact-section,
+    .offerings-text {
+        width: 90%;
+        margin-bottom: 2rem;
+    }
+
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    header .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .main-content {
+        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
+    }
+}
+
+/* Form box styles */
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 2rem; /* Adjust for fixed header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Take full height to center vertically */
+}
+
+.form-box,
+.signup-choice-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 25px;
+    color: #29537D; /* dark blue */
+}
+
+.input-group {
+    margin-bottom: 15px;
+    font-size: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #29537D; /* dark blue */
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.actions button {
+    background-color: #29537D;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.actions button:hover {
+    background-color: #FFD6DC;
+}
+
+.actions a {
+    color: #29537D;
+    font-size: 1em;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.actions a:hover {
+    color: #FFD6DC;
+}
+
+p {
+    margin-top: 15px;
+    color: #666;
+    font-size: 15px;
+}
+
+p a {
+    color: #29537D;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+p a:hover {
+    color: #FFD6DC;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .fa-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Media queries */
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .navbar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .fa-bars {
+        display: block;
+    }
+
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
+    }
+
+    .contact-section,
     .offerings-text {
         width: 90%;
         margin-bottom: 2rem;
