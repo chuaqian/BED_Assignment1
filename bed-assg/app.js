@@ -470,6 +470,39 @@ app.delete('/api/moods/:id', async (req, res) => {
 // DEXTER END ---------------------------------------------------------------------------------------------------
 
 // JING YUAN START ---------------------------------------------------------------------------------------------------
+
+app.post('/submit-score', async (req, res) => {
+    const { Username, Score } = req.body;
+
+    if (!Username || !Score) {
+        return res.status(400).json({ error: 'Username and Score are required' });
+    }
+
+    const sql = 'INSERT INTO Users (Username, Score) VALUES (@Username, @Score)';
+
+    try {
+        const request = new mssql.Request();
+        request.input('Username', mssql.NVarChar, Username);
+        request.input('Score', mssql.Int, Score);
+
+        await request.query(sql);
+
+        console.log('Score inserted successfully');
+        res.json({ message: 'Score submitted successfully' });
+    } catch (err) {
+        console.error('Error inserting score:', err);
+        res.status(500).json({ error: 'Error inserting score' });
+    }
+});
+
+app.get('/get-highest-score', UserController.getHighestScore);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}.`);
+});
+
+
+
 // JING YUAN END ---------------------------------------------------------------------------------------------------
 
 

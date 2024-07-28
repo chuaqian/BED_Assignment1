@@ -1,0 +1,259 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: none;
+    transition: .2s linear;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    overflow-x: shown;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 2rem 9%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+header .logo {
+    font-size: 3rem;
+    color: #29537D;
+    font-weight: bolder;
+}
+
+header .navbar a {
+    font-size: 2rem;
+    padding: 0 2.5rem;
+    color: #666;
+}
+
+header .navbar a:hover {
+    color: #29537D;
+}
+
+header .fa-user {
+    font-size: 4rem;
+    color: #333;
+    margin-left: 1.5rem;
+}
+
+header .fa-user:hover {
+    color: #29537D;
+}
+
+header .fa-bars {
+    font-size: 3rem;
+    color: #333;
+    border-radius: .5rem;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border: .1rem solid rgba(0, 0, 0, .3);
+    display: none;
+}
+
+@media (max-width: 991px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+
+    .navbar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    }
+
+    .navbar.active {
+        display: flex;
+    }
+
+    .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    header .fa-bars {
+        display: block;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 55%;
+    }
+
+    header {
+        padding: 2rem;
+    }
+}
+
+.title{
+    text-align: center;
+    margin-top: -250px;
+    font-size: 28px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.subtitle1{
+    position: absolute;
+    left: 475px;
+    margin-top: 50px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.part1{
+    position: absolute;
+    display: inline-block;
+    left: 475px;
+    font-size: 14px;
+    margin-top: 100px;
+}
+
+.subtitle2{
+    position: absolute;
+    left: 475px;
+    margin-top: 325px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.part2{
+    position: absolute;
+    display: inline-block;
+    left: 475px;
+    font-size: 14px;
+    margin-top: 385px;
+}
+
+.subtitle3{
+    position: absolute;
+    left: 475px;
+    margin-top: 565px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.part3{
+    position: absolute;
+    display: inline-block;
+    left: 475px;
+    font-size: 14px;
+    margin-top: 625px;
+}
+
+.subtitle4{
+    position: absolute;
+    left: 475px;
+    margin-top: 785px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.part4{
+    position: absolute;
+    display: inline-block;
+    left: 475px;
+    font-size: 14px;
+    margin-top: 845px;
+}
+
+.list1{
+    display: inline-block;
+    margin-left: 430px;
+    font-size: larger;
+}
+
+.reference1{
+    position: absolute;
+    left: 475px;
+    margin-top: 1025px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.list2{
+    position: absolute;
+    display: inline-block;
+    left: 495px;
+    font-size: 14px;
+    margin-top: 1075px;
+}
+
+.next{
+    width: 200px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 30px;
+    text-align: center;
+    position: absolute;
+    right: 50px;
+    margin-top: 1200px;
+}
+
+.next:hover{
+    background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
+}
+
+.next:active{
+    background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
+}
+
+.previous{
+    width: 200px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 30px;
+    text-align: center;
+    position: absolute;
+    left: 50px;
+    margin-top: 1200px;
+}
+
+.previous:hover{
+    background-color: hsl(0, 0%, 70%);
+    scale: 1.05;
+}
+
+.previous:active{
+    background-color: hsl(0, 0%, 60%);
+    scale: 1.1;
+}
