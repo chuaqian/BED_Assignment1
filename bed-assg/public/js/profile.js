@@ -63,6 +63,7 @@ function loadProfile() {
     }
 }
 
+
 // Load profile details for editing
 function loadProfileForEditing() {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -148,6 +149,11 @@ function resetPassword() {
 }
 
 // Handle reset password form submission
+document.addEventListener('DOMContentLoaded', function () {
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    resetPasswordForm.addEventListener('submit', handleResetPassword);
+});
+
 async function handleResetPassword(event) {
     event.preventDefault();
 
@@ -162,7 +168,8 @@ async function handleResetPassword(event) {
     const user = JSON.parse(localStorage.getItem('user'));
     const updatedUser = {
         id: user.id,
-        password: newPassword
+        password: newPassword,
+        userType: user.type // Include the user type (user or professional)
     };
 
     try {

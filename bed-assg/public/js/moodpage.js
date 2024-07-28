@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             moodData = data.map(entry => ({
                 id: entry.id,
+                userId: entry.userId,
                 date: new Date(entry.date),
                 description: entry.description,
                 moodIndex: entry.moodIndex
@@ -138,25 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Failed to update mood: ' + response.statusText);
                 }
 
-                const updatedMood = await response.json();
-                const index = moodData.findIndex(mood => mood.id === editMoodId);
-                if (index !== -1) {
-                    updatedMood.date = new Date(updatedMood.date);
-                    if (isNaN(updatedMood.date.getTime())) {
-                        console.error('Received an invalid date from server:', updatedMood.date);
-                        throw new Error('Invalid date received from server update.');
-                    }
-                    moodData[index] = {
-                        id: editMoodId,
-                        userId,
-                        date: updatedMood.date,
-                        description: updatedMood.description,
-                        moodIndex: updatedMood.moodIndex
-                    };
-                }
-                moodData.sort((a, b) => a.date - b.date);
-                updateMoodList();
-                updateMoodChart();
+                // Refresh the page after successful update
+                window.location.reload();
             } catch (error) {
                 console.error('Error updating mood:', error);
                 alert('Failed to update mood. Please check your input and try again.');

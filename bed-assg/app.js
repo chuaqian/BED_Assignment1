@@ -87,13 +87,14 @@ app.post('/api/login', async (req, res) => {
 
         res.status(200).json({ 
             message: 'Login successful', 
-            user: { ...loggedInUser, type: userType } 
+            user: { ...loggedInUser, isProfessional: userType === 'professional', type: userType } 
         });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ error: 'Error logging in' });
     }
 });
+
 
 // Handle POST request for forgot password
 app.post('/api/forgot_password', async (req, res) => {
@@ -184,11 +185,17 @@ app.post('/api/update_profile', async (req, res) => {
 // Handle POST request to reset password
 app.post('/api/reset_password', async (req, res) => {
     try {
-        const { id, password } = req.body;
-        const passwordUpdated = await User.updatePasswordById(id, password);
+        const { id, password, userType } = req.body; // Added userType to distinguish between user and professional
+        let passwordUpdated;
+
+        if (userType === 'professional') {
+            passwordUpdated = await Professional.updatePasswordById(id, password);
+        } else {
+            passwordUpdated = await User.updatePasswordById(id, password);
+        }
 
         if (passwordUpdated) {
-            const updatedUser = await User.getUserById(id);
+            const updatedUser = userType === 'professional' ? await Professional.getProfessionalById(id) : await User.getUserById(id);
             res.json({ user: updatedUser });
         } else {
             res.status(500).json({ message: 'Error updating password' });
@@ -198,6 +205,7 @@ app.post('/api/reset_password', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 // QI AN START ---------------------------------------------------------------------------------------------------
 
 // COMMUNITY START--------------
