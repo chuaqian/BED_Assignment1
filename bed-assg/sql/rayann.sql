@@ -1,25 +1,25 @@
 -- Create Users table
 CREATE TABLE Users (
-    id INT PRIMARY KEY IDENTITY(1,1),
-    name NVARCHAR(255) NOT NULL,
-    email NVARCHAR(255) NOT NULL UNIQUE,
-    password NVARCHAR(255) NOT NULL,
-    phoneNumber NVARCHAR(50) NULL,
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phoneNumber VARCHAR(15) NULL,
     birthday DATE NULL,
-    isProfessional BIT NOT NULL DEFAULT 0
+     isProfessional BIT NOT NULL DEFAULT 0
 );
 
 -- Create Professionals table
 CREATE TABLE Professionals (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    name NVARCHAR(255) NOT NULL,
-    email NVARCHAR(255) NOT NULL UNIQUE,
-    password NVARCHAR(255) NOT NULL,
-    phoneNumber NVARCHAR(50) NULL,
-    birthday DATE NULL,
-    occupation NVARCHAR(255) NULL,
-    highestEducation NVARCHAR(255) NULL,
-    isProfessional BIT DEFAULT 1 
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) NOT NULL UNIQUE,
+    PhoneNumber NVARCHAR(20) NOT NULL,
+    Birthday DATE NOT NULL,
+    Occupation NVARCHAR(100) NOT NULL,
+    HighestEducation NVARCHAR(100) NOT NULL,
+    Password NVARCHAR(100) NOT NULL,
+    isProfessional BIT DEFAULT 1
 );
 
 -- Create Moods table

@@ -23,7 +23,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     margin: 0;
+    min-height: 100vh;
+    padding-top: 8rem; /* Adjust for fixed header height */
 }
 
 /* Header styles */
@@ -217,12 +220,12 @@ header .fa-bars {
     width: 100%;
 }
 
-contact-form button:hover {
+.contact-form button:hover {
     background-color: #FFD6DC;
     color: #29537D;
 }
 
-contact-form p {
+.contact-form p {
     color: #666;
     font-size: 14px;
     margin-top: 10px;
@@ -256,73 +259,15 @@ p a:hover {
     cursor: pointer;
 }
 
-/* Media queries */
-@media (max-width: 991px) {
-    html {
-        font-size: 55%;
-    }
-
-    header {
-        padding: 2rem;
-    }
-
-    .navbar {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        padding: 2rem;
-        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
-    }
-
-    .navbar.active {
-        display: flex;
-    }
-
-    .fa-bars {
-        display: block;
-    }
-
-    .main-content {
-        flex-direction: column;
-        align-items: center;
-        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
-    }
-
-    .contact-section,
-    .offerings-text {
-        width: 90%;
-        margin-bottom: 2rem;
-    }
-
-    .team-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    header .fa-bars {
-        display: block;
-    }
-}
-
-@media (max-width: 450px) {
-    html {
-        font-size: 55%;
-    }
-
-    header {
-        padding: 2rem;
-    }
-
-    .main-content {
-        margin-top: calc(2rem + 8rem); /* Adjust for fixed header height */
-    }
+/* Profile form container */
+.profile-container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: calc(4rem + 8rem); /* Adjust for fixed header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Form box styles */
@@ -337,7 +282,8 @@ p a:hover {
 }
 
 .form-box,
-.signup-choice-box {
+.signup-choice-box,
+.profile-form {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
